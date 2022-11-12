@@ -26,8 +26,11 @@ export const App = () => {
                         setAuth({
                             user: data,
                             token: localStorage.getItem('token'),
-                        }),
+                        })
                     );
+                })
+                .catch(() => {
+                    localStorage.removeItem('token');
                 })
                 .finally(() => {
                     setLoading(false);
@@ -58,7 +61,10 @@ export const App = () => {
                                 <Main />
                             </ProtectedRoute>
                         }
-                    />
+                    >
+                        <Route index element={<div>232332</div>} />
+                        <Route path=":id" element={<div>232332</div>} />
+                    </Route>
                     <Route
                         path="/register"
                         element={

@@ -9,7 +9,6 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AppBar from '@mui/material/AppBar';
 
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
@@ -40,58 +39,51 @@ export const Header = () => {
     };
 
     return (
-        <AppBar
-            position="fixed"
-            color="transparent"
+        <Box
             sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                p: 2,
                 width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
                 ml: { sm: `${DRAWER_WIDTH}px` },
             }}
         >
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    p: 2,
-                }}
+            <IconButton
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { sm: 'none' } }}
             >
-                <IconButton
-                    onClick={handleDrawerToggle}
-                    sx={{ mr: 2, display: { sm: 'none' } }}
-                >
-                    <MenuRoundedIcon />
+                <MenuRoundedIcon />
+            </IconButton>
+
+            <Button sx={{ display: { xs: 'none', sm: 'block' } }}>
+                Скрыть статистику
+            </Button>
+
+            <div>
+                <IconButton sx={{ mr: 1 }}>
+                    <SettingsRoundedIcon />
                 </IconButton>
-
-                <Button sx={{ display: { xs: 'none', sm: 'block' } }}>
-                    Скрыть статистику
-                </Button>
-
-                <div>
-                    <IconButton sx={{ mr: 1 }}>
-                        <SettingsRoundedIcon />
-                    </IconButton>
-                    <IconButton onClick={handleMenu}>
-                        <AccountCircle />
-                    </IconButton>
-                    <Menu
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                    >
-                        <MenuItem onClick={handleLogout}>Выйти</MenuItem>
-                    </Menu>
-                </div>
-            </Box>
-        </AppBar>
+                <IconButton onClick={handleMenu}>
+                    <AccountCircle />
+                </IconButton>
+                <Menu
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <MenuItem onClick={handleLogout}>Выйти</MenuItem>
+                </Menu>
+            </div>
+        </Box>
     );
 };
