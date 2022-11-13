@@ -5,7 +5,7 @@ export const authCheck = (req, res, next) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
         if (!token) {
-            return res.status(500).json({ message: 'Нет доступа' });
+            return res.status(404).json({ message: 'Нет доступа' });
         }
 
         const decoded = jwt.verify(token, SECRETKEY);
@@ -14,6 +14,6 @@ export const authCheck = (req, res, next) => {
         next();
     } catch (error) {
         console.log(error);
-        res.status(400).json({ message: 'Нет доступа', error });
+        res.status(404).json({ message: 'Нет доступа', error });
     }
 };

@@ -1,18 +1,13 @@
 import { SxProps } from '@mui/material/styles';
 
 export const styles = {
-    root: (isActive: () => boolean, open: boolean): SxProps => {
+    root: (isActive: () => boolean): SxProps => {
         return {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            bgcolor: isActive()
-                ? open
-                    ? 'secondary.dark'
-                    : 'secondary.main'
-                : open
-                ? 'grey.200'
-                : '',
+            bgcolor: isActive() ? 'secondary.main' : '',
+
             borderRadius: 1,
             px: 2,
             py: 1.5,
@@ -27,6 +22,7 @@ export const styles = {
 
             textDecoration: 'none',
             color: 'inherit',
+            cursor: 'pointer',
         };
     },
 };

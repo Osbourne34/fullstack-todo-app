@@ -5,3 +5,7 @@ export * from './AuthForm/AuthForm';
 export * from './Header/Header';
 export * from './Sidebar/Sidebar';
 export * from './Drawer/Drawer';
+export * from './CreateAndUpdateForm/CreateAndUpdateForm';
+export * from './Loader/Loader';
+export * from './Avatar/Avatar';
+export * from './ConfirmDialog/ConfirmDialog';

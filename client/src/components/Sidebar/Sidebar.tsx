@@ -2,10 +2,14 @@ import React from 'react';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-
 import Typography from '@mui/material/Typography';
 
-import { AddCategory, CategoryItem, SearchCategory } from '../Categories';
+import {
+    AddCategory,
+    CategoryItem,
+    SearchCategory,
+    CategoryList,
+} from '../Categories';
 
 export const Sidebar = React.memo(() => {
     return (
@@ -32,13 +36,11 @@ export const Sidebar = React.memo(() => {
                 <SearchCategory />
             </Box>
 
-            <CategoryItem />
+            <CategoryItem link="/" title="Все" editable={false} />
 
             <Divider sx={{ my: 2 }} />
 
-            <CategoryItem id="2323" category="Дела" />
-            <CategoryItem id="123" category="Дела" />
-            <CategoryItem id="2321" category="Дела" />
+            <CategoryList />
         </Box>
     );
 });

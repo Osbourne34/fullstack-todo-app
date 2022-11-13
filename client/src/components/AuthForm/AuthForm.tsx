@@ -2,12 +2,10 @@ import React from 'react';
 
 import { useForm, Controller } from 'react-hook-form';
 
-import { Button, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
-export interface AuthFormInputs {
-    login: string;
-    password: string;
-}
+import { AuthFormInputs } from '../../types/AuthFormInputs';
 
 interface AuthFormProps {
     onSubmit: (body: AuthFormInputs) => void;

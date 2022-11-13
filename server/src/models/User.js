@@ -5,13 +5,13 @@ const UserSchema = new Schema(
         login: {
             type: String,
             unique: true,
-            require: 'Обязательное поле',
+            required: 'Обязательное поле',
             trim: true,
             lowercase: true,
         },
         password: {
             type: String,
-            require: 'Обязательное поле',
+            required: 'Обязательное поле',
         },
     },
     {

@@ -6,14 +6,15 @@ import { useAppDispatch } from '../../hooks';
 import { useLoginMutation } from '../../store/api/AuthApi';
 import { setAuth } from '../../store/slices/authSlices';
 
-import { isErrorWithMessage } from '../../types/ErrorsApi';
-
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 
-import { AuthForm, AuthFormInputs } from '../../components';
+import { AuthForm } from '../../components';
+
+import { isErrorWithMessage } from '../../types/ErrorsApi';
+import { AuthFormInputs } from '../../types/AuthFormInputs';
 
 export const Login = () => {
     const dispatch = useAppDispatch();
