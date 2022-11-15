@@ -1,18 +1,18 @@
-import { Category } from '../models/Category.js';
+import { Priority } from '../models/Priority.js';
 
 export const create = async (req, res) => {
     try {
         const { userId } = req;
         const { title } = req.body;
 
-        const candidate = await Category.find({ owner: userId, title });
+        const candidate = await Priority.find({ owner: userId, title });
         if (candidate.length) {
             return res.status(400).json({
-                message: 'Категория с таким именем уже существует',
+                message: 'Приоритет с таким именем уже существует',
             });
         }
 
-        const category = await Category.create({
+        const category = await Priority.create({
             owner: userId,
             title,
         });
@@ -26,7 +26,7 @@ export const create = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
         const { userId } = req;
-        const categories = await Category.find({ owner: userId });
+        const categories = await Priority.find({ owner: userId });
         res.json(categories);
     } catch (error) {
         console.log(error);
@@ -40,20 +40,20 @@ export const update = async (req, res) => {
         const { id } = req.params;
         const { title } = req.body;
 
-        const candidate = await Category.findOne({
+        const candidate = await Priority.findOne({
             owner: userId,
             title,
         });
 
         if (candidate) {
             return res.status(400).json({
-                message: 'Категория с таким именем уже существует',
+                message: 'Приоритет с таким именем уже существует',
             });
         }
 
-        const updated = await Category.findOneAndUpdate(
+        const updated = await Priority.findOneAndUpdate(
             { owned: userId, _id: id },
-            { title },
+            { ...req.body },
             { new: true },
         );
         res.json(updated);
@@ -68,7 +68,7 @@ export const remove = async (req, res) => {
         const { userId } = req;
         const { id } = req.params;
 
-        const deleted = await Category.findOneAndDelete({
+        const deleted = await Priority.findOneAndDelete({
             owner: userId,
             _id: id,
         });

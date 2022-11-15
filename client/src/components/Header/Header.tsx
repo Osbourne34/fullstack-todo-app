@@ -8,9 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 
 import { Avatar } from '../../components';
+import { SettingPriorities } from '../Priorities';
 
 import { DRAWER_WIDTH } from '../../constants/ui';
 
@@ -44,10 +44,7 @@ export const Header = () => {
             </Button>
 
             <div>
-                <IconButton sx={{ mr: 1 }}>
-                    <SettingsRoundedIcon />
-                </IconButton>
-
+                <SettingPriorities />
                 <Avatar />
             </div>
         </Box>
