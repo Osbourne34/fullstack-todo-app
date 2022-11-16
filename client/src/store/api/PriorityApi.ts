@@ -31,7 +31,10 @@ export const priorityApi = createApi({
             }),
             providesTags: ['Priority'],
         }),
-        updatePriority: builder.mutation<Priority, any>({
+        updatePriority: builder.mutation<
+            Priority,
+            { id: string; token: string; body: { [key: string]: string } }
+        >({
             query: ({ id, token, body }) => ({
                 url: `priority/${id}`,
                 method: 'PATCH',
@@ -40,6 +43,20 @@ export const priorityApi = createApi({
                     authorization: `Bearer ${token}`,
                 },
             }),
+            invalidatesTags: ['Priority'],
+        }),
+        deletePriority: builder.mutation<
+            Priority,
+            { id: string; token: string }
+        >({
+            query: ({ id, token }) => ({
+                url: `priority/${id}`,
+                method: 'DELETE',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }),
+            invalidatesTags: ['Priority'],
         }),
     }),
 });
@@ -48,4 +65,5 @@ export const {
     useCreatePriorityMutation,
     useGetAllPrioritiesQuery,
     useUpdatePriorityMutation,
+    useDeletePriorityMutation,
 } = priorityApi;

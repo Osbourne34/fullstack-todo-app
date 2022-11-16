@@ -47,7 +47,7 @@ export const CategoryList = () => {
 
     const categories = useMemo(() => {
         return data?.filter(({ title }) =>
-            title.toLowerCase().includes(value.toLocaleLowerCase()),
+            title.toLowerCase().includes(value.toLocaleLowerCase())
         );
     }, [value, data]);
 

@@ -11,20 +11,31 @@ interface PriorityItemProps {
     title: string;
     id: string;
     color: string | null;
-    onUpdate: (id: string, color: string) => void;
+    onUpdateColor: (id: string, color: string) => void;
+    onUpdateTitle: (id: string, title: string) => void;
+    onDelete: (id: string) => void;
 }
 
 export const PriorityItem = ({
     title,
     color,
     id,
-    onUpdate,
+    onUpdateColor,
+    onUpdateTitle,
+    onDelete,
 }: PriorityItemProps) => {
     const colorValue = useRef<HTMLInputElement>(null);
 
-    const handleUpdate = () => {
-        console.dir(colorValue.current);
-        onUpdate(id, colorValue.current?.value || '#000000');
+    const handleUpdateTitle = () => {
+        onUpdateTitle(id, title);
+    };
+
+    const handleUpdateColor = () => {
+        onUpdateColor(id, colorValue.current?.value || '#000000');
+    };
+
+    const handleDelete = () => {
+        onDelete(id);
     };
 
     return (
@@ -33,24 +44,32 @@ export const PriorityItem = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                mb: 1,
+                '&:last-of-type': {
+                    mb: 2,
+                },
             }}
         >
-            <Typography sx={{ textTransform: 'capitalize' }}>
+            <Typography
+                sx={{
+                    '&:first-letter': {
+                        textTransform: 'capitalize',
+                    },
+                }}
+            >
                 {title}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <input
                     ref={colorValue}
-                    onBlur={handleUpdate}
-                    value={color || '#000000'}
+                    onBlur={handleUpdateColor}
+                    defaultValue={color || '#000000'}
                     readOnly
                     type="color"
                 />
-                <IconButton sx={{ ml: 1 }}>
+                <IconButton onClick={handleUpdateTitle} sx={{ ml: 1 }}>
                     <EditRoundedIcon />
                 </IconButton>
-                <IconButton color="error" sx={{ ml: 1 }}>
+                <IconButton onClick={handleDelete} color="error" sx={{ ml: 1 }}>
                     <DeleteRoundedIcon />
                 </IconButton>
             </Box>

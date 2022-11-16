@@ -36,7 +36,11 @@ export const CategoryItem = ({
         <Box onClick={() => navigate(link)} sx={styles.root(isActive)}>
             <Typography
                 color={isActive() ? 'common.white' : ''}
-                sx={{ textTransform: 'capitalize' }}
+                sx={{
+                    '&:first-letter': {
+                        textTransform: 'capitalize',
+                    },
+                }}
             >
                 {title}
             </Typography>
