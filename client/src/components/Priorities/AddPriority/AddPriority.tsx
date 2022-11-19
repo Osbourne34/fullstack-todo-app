@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
-import { auth } from '../../../store/slices/authSlices';
+import { auth } from '../../../store/slices/authSlice';
 import { useCreatePriorityMutation } from '../../../store/api/PriorityApi';
+
+import { useSnackbar } from 'notistack';
 
 import Link from '@mui/material/Link';
 import Dialog from '@mui/material/Dialog';
@@ -14,16 +16,20 @@ import { CreateAndUpdateForm } from '../../../components';
 import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
 
 export const AddPriority = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const { token } = useAppSelector(auth);
     const [open, setOpen] = useState<boolean>(false);
 
     const [createPriority, { error }] = useCreatePriorityMutation();
 
-    const onSubmit = async ({ title }: CreateAndUpdateFormInput) => {
-        await createPriority({ body: { title }, token: token || '' })
+    const handleCreatePriority = async ({
+        title,
+    }: CreateAndUpdateFormInput) => {
+        await createPriority({ body: { title }, token })
             .unwrap()
             .then(() => {
                 handleClose();
+                enqueueSnackbar('Приоритет добавлен', { variant: 'success' });
             });
     };
 
@@ -46,7 +52,7 @@ export const AddPriority = () => {
 
                 <DialogContent sx={{ overflow: 'visible' }}>
                     <CreateAndUpdateForm
-                        onSubmit={onSubmit}
+                        onSubmit={handleCreatePriority}
                         onClose={handleClose}
                         error={error}
                     />

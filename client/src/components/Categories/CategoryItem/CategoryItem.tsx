@@ -2,6 +2,13 @@ import React from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { useAppDispatch } from '../../../hooks';
+import {
+    setIdToUpdate,
+    setTitleToUpdate,
+    setIdToDelete,
+} from '../../../store/slices/categorySlice';
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -14,19 +21,21 @@ interface CategoryItemProps {
     link: string;
     title: string;
     editable: boolean;
-    onUpdate?: () => void;
-    onDelete?: () => void;
 }
 
-export const CategoryItem = ({
-    link,
-    title,
-    editable,
-    onUpdate,
-    onDelete,
-}: CategoryItemProps) => {
+export const CategoryItem = ({ link, title, editable }: CategoryItemProps) => {
     const { pathname } = useLocation();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const handleUpdate = () => {
+        dispatch(setIdToUpdate(link));
+        dispatch(setTitleToUpdate(title));
+    };
+
+    const handleDelete = () => {
+        dispatch(setIdToDelete(link));
+    };
 
     const isActive = (): boolean => {
         return pathname === link || pathname.slice(1) === link;
@@ -48,8 +57,8 @@ export const CategoryItem = ({
                 {editable && (
                     <CategoryActions
                         isActive={isActive}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
+                        onUpdate={handleUpdate}
+                        onDelete={handleDelete}
                     />
                 )}
                 <Paper

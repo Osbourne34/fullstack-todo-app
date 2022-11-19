@@ -4,7 +4,9 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks';
 import { useLoginMutation } from '../../store/api/AuthApi';
-import { setAuth } from '../../store/slices/authSlices';
+import { setAuth } from '../../store/slices/authSlice';
+
+import { useSnackbar } from 'notistack';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -17,6 +19,7 @@ import { isErrorWithMessage } from '../../types/ErrorsApi';
 import { AuthFormInputs } from '../../types/AuthFormInputs';
 
 export const Login = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [login, { error }] = useLoginMutation();
@@ -28,6 +31,7 @@ export const Login = () => {
                 localStorage.setItem('token', data.token);
                 dispatch(setAuth(data));
                 navigate('/', { replace: true });
+                enqueueSnackbar('Вы авторизованы', { variant: 'success' });
             });
     };
 

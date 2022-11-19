@@ -4,13 +4,15 @@ import { Routes, Route } from 'react-router-dom';
 
 import { useAppDispatch } from './hooks';
 import { useLazyMeQuery } from './store/api/AuthApi';
-import { setAuth } from './store/slices/authSlices';
+import { setAuth } from './store/slices/authSlice';
+
+import { SnackbarProvider } from 'notistack';
 
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { Main, Register, Login } from './pages';
-import { AuthLayout, ProtectedRoute, PublicRoute } from './components';
+import { AuthLayout, ProtectedRoute, PublicRoute, Tasks } from './components';
 
 export const App = () => {
     const dispatch = useAppDispatch();
@@ -25,8 +27,8 @@ export const App = () => {
                     dispatch(
                         setAuth({
                             user: data,
-                            token: localStorage.getItem('token'),
-                        })
+                            token: String(localStorage.getItem('token')),
+                        }),
                     );
                 })
                 .catch(() => {
@@ -53,39 +55,45 @@ export const App = () => {
                     <CircularProgress color="inherit" />
                 </Backdrop>
             ) : (
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <ProtectedRoute>
-                                <Main />
-                            </ProtectedRoute>
-                        }
-                    >
-                        <Route index element={<div>232332</div>} />
-                        <Route path=":id" element={<div>232332</div>} />
-                    </Route>
-                    <Route
-                        path="/register"
-                        element={
-                            <AuthLayout>
-                                <PublicRoute>
-                                    <Register />
-                                </PublicRoute>
-                            </AuthLayout>
-                        }
-                    />
-                    <Route
-                        path="/login"
-                        element={
-                            <AuthLayout>
-                                <PublicRoute>
-                                    <Login />
-                                </PublicRoute>
-                            </AuthLayout>
-                        }
-                    />
-                </Routes>
+                <SnackbarProvider
+                    maxSnack={3}
+                    autoHideDuration={3000}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                >
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <ProtectedRoute>
+                                    <Main />
+                                </ProtectedRoute>
+                            }
+                        >
+                            <Route index element={<Tasks />} />
+                            <Route path=":id" element={<Tasks />} />
+                        </Route>
+                        <Route
+                            path="/register"
+                            element={
+                                <AuthLayout>
+                                    <PublicRoute>
+                                        <Register />
+                                    </PublicRoute>
+                                </AuthLayout>
+                            }
+                        />
+                        <Route
+                            path="/login"
+                            element={
+                                <AuthLayout>
+                                    <PublicRoute>
+                                        <Login />
+                                    </PublicRoute>
+                                </AuthLayout>
+                            }
+                        />
+                    </Routes>
+                </SnackbarProvider>
             )}
         </>
     );

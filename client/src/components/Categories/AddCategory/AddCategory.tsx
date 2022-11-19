@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { useCreateCategoryMutation } from '../../../store/api/CategoriesApi';
-import { auth } from '../../../store/slices/authSlices';
+import { auth } from '../../../store/slices/authSlice';
+
+import { useSnackbar } from 'notistack';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -15,17 +17,21 @@ import { CreateAndUpdateForm } from '../../../components';
 import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
 
 export const AddCategory = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const { token } = useAppSelector(auth);
     const [createCategory, { error, reset }] = useCreateCategoryMutation();
 
     const [open, setOpen] = useState<boolean>(false);
 
-    const onSubmit = async ({ title }: CreateAndUpdateFormInput) => {
-        if (token) {
-            await createCategory({ body: { title }, token })
-                .unwrap()
-                .then(() => setOpen(false));
-        }
+    const handleCreateCategory = async ({
+        title,
+    }: CreateAndUpdateFormInput) => {
+        await createCategory({ body: { title }, token })
+            .unwrap()
+            .then(() => {
+                setOpen(false);
+                enqueueSnackbar('Категория добавлена', { variant: 'success' });
+            });
     };
 
     const handleOpen = () => {
@@ -48,7 +54,7 @@ export const AddCategory = () => {
 
                 <DialogContent sx={{ overflow: 'visible' }}>
                     <CreateAndUpdateForm
-                        onSubmit={onSubmit}
+                        onSubmit={handleCreateCategory}
                         onClose={handleClose}
                         error={error}
                     />

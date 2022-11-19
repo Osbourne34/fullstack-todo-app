@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { ui, setIsOpenDrawer } from '../../store/slices/uiSlices';
+import { ui, setIsOpenDrawer } from '../../store/slices/uiSlice';
 
 import { Drawer as MaterialDrawer } from '@mui/material';
 

@@ -8,8 +8,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface CategoryActionsProps {
     isActive: () => boolean;
-    onUpdate?: () => void;
-    onDelete?: () => void;
+    onUpdate: () => void;
+    onDelete: () => void;
 }
 
 export const CategoryActions = ({
@@ -26,12 +26,12 @@ export const CategoryActions = ({
     };
 
     const handleUpdate = (event: React.MouseEvent) => {
-        onUpdate && onUpdate();
+        onUpdate();
         handleCloseMenu(event);
     };
 
     const handleDelete = (event: React.MouseEvent) => {
-        onDelete && onDelete();
+        onDelete();
         handleCloseMenu(event);
     };
 

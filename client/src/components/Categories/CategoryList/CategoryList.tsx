@@ -1,15 +1,22 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useAppSelector } from '../../../hooks';
+import { useAppSelector, useAppDispatch } from '../../../hooks';
+import { auth } from '../../../store/slices/authSlice';
 import {
     useGetAllCategoriesQuery,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
 } from '../../../store/api/CategoriesApi';
-import { auth } from '../../../store/slices/authSlices';
-import { searchValue } from '../../../store/slices/categotySearch';
+import {
+    category,
+    setIdToUpdate,
+    setTitleToUpdate,
+    setIdToDelete,
+} from '../../../store/slices/categorySlice';
+
+import { useSnackbar } from 'notistack';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -25,21 +32,20 @@ import {
 import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
 
 export const CategoryList = () => {
-    const [idToUpdate, setIdToUpdate] = useState<string>('');
-    const [titleToUpdate, setTitleToUpdate] = useState<string>('');
-    const [idToDelete, setIdToDelete] = useState<string>('');
+    const { enqueueSnackbar } = useSnackbar();
+    const { idToUpdate, titleToUpdate, idToDelete, searchValue } =
+        useAppSelector(category);
+    const { token } = useAppSelector(auth);
+    const dispatch = useAppDispatch();
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
-
-    const { token } = useAppSelector(auth);
-    const { value } = useAppSelector(searchValue);
 
     const {
         data,
         isLoading: categoryLoading,
         error,
-    } = useGetAllCategoriesQuery(token || '');
+    } = useGetAllCategoriesQuery(token);
     const [updateCategory, { error: updateError, reset }] =
         useUpdateCategoryMutation();
     const [deleteCategory, { isLoading: loadingDelete }] =
@@ -47,54 +53,43 @@ export const CategoryList = () => {
 
     const categories = useMemo(() => {
         return data?.filter(({ title }) =>
-            title.toLowerCase().includes(value.toLocaleLowerCase())
+            title.toLowerCase().includes(searchValue.toLowerCase()),
         );
-    }, [value, data]);
-
-    const handleUpdate = (id: string, title: string) => {
-        setIdToUpdate(id);
-        setTitleToUpdate(title);
-    };
-
-    const handleDelete = (id: string) => {
-        setIdToDelete(id);
-    };
+    }, [data, searchValue]);
 
     const submitUpdate = async ({ title }: CreateAndUpdateFormInput) => {
-        if (token) {
-            await updateCategory({
-                id: idToUpdate,
-                body: { title },
-                token,
-            })
-                .unwrap()
-                .then(() => {
-                    handleCloseDialog();
-                });
-        }
+        await updateCategory({
+            id: idToUpdate,
+            body: { title },
+            token,
+        })
+            .unwrap()
+            .then(() => {
+                handleCloseDialog();
+                enqueueSnackbar('Категория обновлена', { variant: 'info' });
+            });
     };
 
     const confirmDeletion = () => {
-        if (token) {
-            deleteCategory({ id: idToDelete, token })
-                .unwrap()
-                .then(() => {
-                    if (pathname.slice(1) === idToDelete) {
-                        navigate('/');
-                    }
-                    handleCloseConfirm();
-                });
-        }
+        deleteCategory({ id: idToDelete, token })
+            .unwrap()
+            .then(() => {
+                if (pathname.slice(1) === idToDelete) {
+                    navigate('/');
+                }
+                handleCloseConfirm();
+                enqueueSnackbar('Категория удалена', { variant: 'error' });
+            });
     };
 
     const handleCloseDialog = () => {
         reset();
-        setIdToUpdate('');
-        setTitleToUpdate('');
+        dispatch(setIdToUpdate(''));
+        dispatch(setTitleToUpdate(''));
     };
 
     const handleCloseConfirm = () => {
-        setIdToDelete('');
+        dispatch(setIdToDelete(''));
     };
 
     if (categoryLoading) {
@@ -109,14 +104,7 @@ export const CategoryList = () => {
         <>
             {categories &&
                 categories.map(({ _id, title }) => (
-                    <CategoryItem
-                        key={_id}
-                        link={_id}
-                        title={title}
-                        editable
-                        onUpdate={() => handleUpdate(_id, title)}
-                        onDelete={() => handleDelete(_id)}
-                    />
+                    <CategoryItem key={_id} link={_id} title={title} editable />
                 ))}
 
             <Dialog

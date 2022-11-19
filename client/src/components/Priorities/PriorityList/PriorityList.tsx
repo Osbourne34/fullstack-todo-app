@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { useAppSelector } from '../../../hooks';
-import { auth } from '../../../store/slices/authSlices';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { auth } from '../../../store/slices/authSlice';
 import {
     useGetAllPrioritiesQuery,
     useUpdatePriorityMutation,
     useDeletePriorityMutation,
 } from '../../../store/api/PriorityApi';
+import {
+    priority,
+    setIdToUpdateTitle,
+    setTitleToUpdate,
+    setIdToDelete,
+} from '../../../store/slices/prioritySlice';
+
+import { useSnackbar } from 'notistack';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -21,59 +29,56 @@ import { PriorityItem } from '../../Priorities';
 import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
 
 export const PriorityList = () => {
-    const [idToUpdate, setIdToUpdate] = useState<string>('');
-    const [titleToUpdate, setTitleToUpdate] = useState<string>('');
-    const [idToDelete, setIdToDelete] = useState<string>('');
-
+    const { enqueueSnackbar } = useSnackbar();
     const { token } = useAppSelector(auth);
+    const { idToUpdateTitle, titleToUpdate, idToDelete } =
+        useAppSelector(priority);
+    const dispatch = useAppDispatch();
 
     const {
         data,
         isLoading,
         error: loadingError,
-    } = useGetAllPrioritiesQuery(token || '');
+    } = useGetAllPrioritiesQuery(token);
     const [updatePriority, { error: updateError, reset }] =
         useUpdatePriorityMutation();
     const [deletePriority, { isLoading: loadingDelete }] =
         useDeletePriorityMutation();
 
     const submitUpdate = ({ title }: CreateAndUpdateFormInput) => {
-        updatePriority({ id: idToUpdate, token: token || '', body: { title } })
+        updatePriority({ id: idToUpdateTitle, token, body: { title } })
             .unwrap()
             .then(() => {
                 handleCloseDialog();
+                enqueueSnackbar('Приоритет обновлен', { variant: 'info' });
             });
     };
 
     const handleUpdateColor = (id: string, color: string) => {
-        updatePriority({ id, token: token || '', body: { color } });
-    };
-
-    const confirmDeletion = () => {
-        deletePriority({ id: idToDelete, token: token || '' })
+        updatePriority({ id, token, body: { color } })
             .unwrap()
             .then(() => {
-                handleCloseConfirm();
+                enqueueSnackbar('Цвет обновлен', { variant: 'info' });
             });
     };
 
-    const handleUpdateTitle = (id: string, title: string) => {
-        setIdToUpdate(id);
-        setTitleToUpdate(title);
-    };
-
-    const handleDelete = (id: string) => {
-        setIdToDelete(id);
+    const confirmDeletion = () => {
+        deletePriority({ id: idToDelete, token })
+            .unwrap()
+            .then(() => {
+                handleCloseConfirm();
+                enqueueSnackbar('Приоритет удален', { variant: 'error' });
+            });
     };
 
     const handleCloseDialog = () => {
         reset();
-        setIdToUpdate('');
-        setTitleToUpdate('');
+        dispatch(setIdToUpdateTitle(''));
+        dispatch(setTitleToUpdate(''));
     };
 
     const handleCloseConfirm = () => {
-        setIdToDelete('');
+        dispatch(setIdToDelete(''));
     };
 
     if (isLoading) {
@@ -94,13 +99,11 @@ export const PriorityList = () => {
                         color={color}
                         id={_id}
                         onUpdateColor={handleUpdateColor}
-                        onUpdateTitle={handleUpdateTitle}
-                        onDelete={handleDelete}
                     />
                 ))}
 
             <Dialog
-                open={!!idToUpdate}
+                open={!!idToUpdateTitle}
                 onClose={handleCloseDialog}
                 maxWidth="xs"
                 fullWidth

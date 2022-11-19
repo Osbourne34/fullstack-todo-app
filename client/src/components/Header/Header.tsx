@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAppDispatch } from '../../hooks';
-import { setIsOpenDrawer } from '../../store/slices/uiSlices';
+import { setIsOpenDrawer } from '../../store/slices/uiSlice';
 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';

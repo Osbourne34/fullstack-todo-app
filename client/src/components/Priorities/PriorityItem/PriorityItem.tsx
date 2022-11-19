@@ -1,5 +1,12 @@
 import React, { useRef } from 'react';
 
+import { useAppDispatch } from '../../../hooks';
+import {
+    setIdToUpdateTitle,
+    setTitleToUpdate,
+    setIdToDelete,
+} from '../../../store/slices/prioritySlice';
+
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -12,8 +19,6 @@ interface PriorityItemProps {
     id: string;
     color: string | null;
     onUpdateColor: (id: string, color: string) => void;
-    onUpdateTitle: (id: string, title: string) => void;
-    onDelete: (id: string) => void;
 }
 
 export const PriorityItem = ({
@@ -21,13 +26,13 @@ export const PriorityItem = ({
     color,
     id,
     onUpdateColor,
-    onUpdateTitle,
-    onDelete,
 }: PriorityItemProps) => {
     const colorValue = useRef<HTMLInputElement>(null);
+    const dispatch = useAppDispatch();
 
     const handleUpdateTitle = () => {
-        onUpdateTitle(id, title);
+        dispatch(setIdToUpdateTitle(id));
+        dispatch(setTitleToUpdate(title));
     };
 
     const handleUpdateColor = () => {
@@ -35,7 +40,7 @@ export const PriorityItem = ({
     };
 
     const handleDelete = () => {
-        onDelete(id);
+        dispatch(setIdToDelete(id));
     };
 
     return (

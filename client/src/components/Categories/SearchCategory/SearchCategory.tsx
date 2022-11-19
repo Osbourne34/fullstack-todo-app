@@ -1,15 +1,12 @@
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import {
-    searchValue,
-    setSearchValue,
-} from '../../../store/slices/categotySearch';
+import { category, setSearchValue } from '../../../store/slices/categorySlice';
 
 import TextField from '@mui/material/TextField';
 
 export const SearchCategory = () => {
-    const { value } = useAppSelector(searchValue);
+    const { searchValue } = useAppSelector(category);
     const dispatch = useAppDispatch();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +15,7 @@ export const SearchCategory = () => {
 
     return (
         <TextField
-            value={value}
+            value={searchValue}
             onChange={handleChange}
             variant="standard"
             label="Поиск по категорий"

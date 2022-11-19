@@ -4,7 +4,9 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks';
 import { useRegisterMutation } from '../../store/api/AuthApi';
-import { setAuth } from '../../store/slices/authSlices';
+import { setAuth } from '../../store/slices/authSlice';
+
+import { useSnackbar } from 'notistack';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -17,6 +19,7 @@ import { isErrorWithMessage } from '../../types/ErrorsApi';
 import { AuthFormInputs } from '../../types/AuthFormInputs';
 
 export const Register = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [register, { error }] = useRegisterMutation();
@@ -28,6 +31,7 @@ export const Register = () => {
                 localStorage.setItem('token', data.token);
                 dispatch(setAuth(data));
                 navigate('/', { replace: true });
+                enqueueSnackbar('Вы зарегистрированы', { variant: 'success' });
             });
     };
 
