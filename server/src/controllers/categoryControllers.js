@@ -24,10 +24,23 @@ export const create = async (req, res) => {
 };
 
 export const getAll = async (req, res) => {
+    const { search } = req.query;
+    const searchValue = new RegExp(search, 'i');
+
     try {
         const { userId } = req;
-        const categories = await Category.find({ owner: userId });
-        res.json(categories);
+        if (search) {
+            const foundCategories = await Category.find({
+                owner: userId,
+                title: searchValue,
+            });
+            res.json(foundCategories);
+        } else {
+            const categories = await Category.find({
+                owner: userId,
+            });
+            res.json(categories);
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Произошла ошибка', error });

@@ -22,9 +22,16 @@ export const categoriesApi = createApi({
             }),
             invalidatesTags: ['Category'],
         }),
-        getAllCategories: builder.query<Category[], string>({
-            query: (token) => ({
-                url: 'categories',
+        getAllCategories: builder.query<
+            Category[],
+            { token: string; searchValue: string }
+        >({
+            query: ({ token, searchValue }) => ({
+                url: `${
+                    searchValue
+                        ? `categories?search=${searchValue}`
+                        : 'categories'
+                }`,
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
@@ -63,7 +70,7 @@ export const categoriesApi = createApi({
 
 export const {
     useCreateCategoryMutation,
-    useGetAllCategoriesQuery,
+    useLazyGetAllCategoriesQuery,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
 } = categoriesApi;

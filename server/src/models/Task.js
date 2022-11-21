@@ -5,7 +5,6 @@ const TaskSchema = new Schema({
         type: String,
         required: 'Обязательное поле',
         trim: true,
-        lowercase: true,
     },
     owner: {
         type: Schema.Types.ObjectId,

@@ -11,3 +11,4 @@ export * from './Avatar/Avatar';
 export * from './ConfirmDialog/ConfirmDialog';
 export * from './Tasks/Tasks';
 export * from './TaskForm/TaskForm';
+export * from './AddTask/AddTask';

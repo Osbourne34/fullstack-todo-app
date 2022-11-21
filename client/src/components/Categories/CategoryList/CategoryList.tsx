@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useEffect } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAppSelector, useAppDispatch } from '../../../hooks';
 import { auth } from '../../../store/slices/authSlice';
 import {
-    useGetAllCategoriesQuery,
+    useLazyGetAllCategoriesQuery,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
 } from '../../../store/api/CategoriesApi';
@@ -41,21 +41,18 @@ export const CategoryList = () => {
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const {
-        data,
-        isLoading: categoryLoading,
-        error,
-    } = useGetAllCategoriesQuery(token);
+    const [
+        getAllCategories,
+        { data: categories, isFetching: categoryLoading, error },
+    ] = useLazyGetAllCategoriesQuery();
     const [updateCategory, { error: updateError, reset }] =
         useUpdateCategoryMutation();
     const [deleteCategory, { isLoading: loadingDelete }] =
         useDeleteCategoryMutation();
 
-    const categories = useMemo(() => {
-        return data?.filter(({ title }) =>
-            title.toLowerCase().includes(searchValue.toLowerCase()),
-        );
-    }, [data, searchValue]);
+    useEffect(() => {
+        getAllCategories({ token, searchValue });
+    }, [getAllCategories, token, searchValue]);
 
     const submitUpdate = async ({ title }: CreateAndUpdateFormInput) => {
         await updateCategory({
