@@ -7,6 +7,7 @@ import { DB, PORT } from './constants/url.js';
 import { authRoutes } from './routes/authRoutes.js';
 import { categoryRoutes } from './routes/categoryRoutes.js';
 import { priorityRoutes } from './routes/priorityRoutes.js';
+import { taskRoutes } from './routes/taskRoutes.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/', categoryRoutes);
 app.use('/', priorityRoutes);
+app.use('/', taskRoutes);
 
 const start = async () => {
     try {
