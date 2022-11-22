@@ -7,8 +7,18 @@ import DialogContent from '@mui/material/DialogContent';
 
 import { TaskForm } from '../../components';
 
+import { TaskFormInputs } from '../../types/TaskFormInputs';
+
 export const AddTask = () => {
     const [open, setOpen] = useState<boolean>(false);
+
+    const handleSubmit = (body: TaskFormInputs) => {
+        const data = {
+            ...body,
+            category: body.category || null,
+            priority: body.priority || null,
+        };
+    };
 
     const handleOpen = () => {
         setOpen(true);
@@ -28,7 +38,7 @@ export const AddTask = () => {
                 <DialogTitle>Добавление задачи</DialogTitle>
 
                 <DialogContent sx={{ overflow: 'visible' }}>
-                    <TaskForm />
+                    <TaskForm onSubmit={handleSubmit} />
                 </DialogContent>
             </Dialog>
         </>

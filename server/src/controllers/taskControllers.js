@@ -3,12 +3,14 @@ import { Task } from '../models/Task.js';
 export const create = async (req, res) => {
     try {
         const userId = req.userId;
-        const { title, deadline } = req.body;
+        const { title, deadline, category, priority } = req.body;
 
         const todo = await Task.create({
             title,
             owner: userId,
             deadline,
+            category,
+            priority,
         });
 
         res.json(todo);

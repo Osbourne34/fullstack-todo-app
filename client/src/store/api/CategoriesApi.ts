@@ -24,7 +24,7 @@ export const categoriesApi = createApi({
         }),
         getAllCategories: builder.query<
             Category[],
-            { token: string; searchValue: string }
+            { token: string; searchValue?: string }
         >({
             query: ({ token, searchValue }) => ({
                 url: `${
@@ -71,6 +71,7 @@ export const categoriesApi = createApi({
 export const {
     useCreateCategoryMutation,
     useLazyGetAllCategoriesQuery,
+    useGetAllCategoriesQuery,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
 } = categoriesApi;
