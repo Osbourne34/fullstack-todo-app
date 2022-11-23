@@ -4,5 +4,5 @@ export const taskRoutes = new Router();
 import { create, getAll } from '../controllers/taskControllers.js';
 import { authCheck } from '../middlewares/authCheck.js';
 
-taskRoutes.get('/todos', authCheck, getAll);
-taskRoutes.post('/todos', authCheck, create);
+taskRoutes.get('/tasks', authCheck, getAll);
+taskRoutes.post('/task', authCheck, create);

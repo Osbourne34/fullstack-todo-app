@@ -9,6 +9,6 @@ export * from './CreateAndUpdateForm/CreateAndUpdateForm';
 export * from './Loader/Loader';
 export * from './Avatar/Avatar';
 export * from './ConfirmDialog/ConfirmDialog';
-export * from './Tasks/Tasks';
 export * from './TaskForm/TaskForm';
 export * from './AddTask/AddTask';
+export * from './TasksFilter/TasksFilter';

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const CategorySchema = new Schema({
+export const CategorySchema = new Schema({
     title: {
         type: String,
         required: 'Обязательное поле',

@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authApi } from './api/AuthApi';
 import { categoriesApi } from './api/CategoriesApi';
 import { priorityApi } from './api/PriorityApi';
+import { taskApi } from './api/TaskApi';
 import authReducer from './slices/authSlice';
 import uiReducer from './slices/uiSlice';
 import categoryReducer from './slices/categorySlice';
@@ -12,6 +13,7 @@ export const store = configureStore({
         [authApi.reducerPath]: authApi.reducer,
         [categoriesApi.reducerPath]: categoriesApi.reducer,
         [priorityApi.reducerPath]: priorityApi.reducer,
+        [taskApi.reducerPath]: taskApi.reducer,
         auth: authReducer,
         ui: uiReducer,
         category: categoryReducer,
@@ -23,6 +25,7 @@ export const store = configureStore({
             authApi.middleware,
             categoriesApi.middleware,
             priorityApi.middleware,
+            taskApi.middleware
         ),
 });
 

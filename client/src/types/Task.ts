@@ -6,7 +6,7 @@ export interface Task {
     _id: string;
     owner: string;
     deadline: string;
-    category: Category;
-    priority: Priority;
+    category: Category | null;
+    priority: Priority | null;
     completed: boolean;
 }

@@ -1,4 +1,5 @@
 import { Task } from '../models/Task.js';
+import { CategorySchema } from '../models/Category.js';
 
 export const create = async (req, res) => {
     try {
@@ -26,12 +27,7 @@ export const getAll = async (req, res) => {
 
         const todos = await Task.find({
             owner: userId,
-        }).transform((todos) =>
-            todos.map((todo) => ({
-                ...todo._doc,
-                deadline: todo.deadline.toLocaleDateString(),
-            })),
-        );
+        }).populate(['category', 'priority']);
 
         res.json(todos);
     } catch (error) {

@@ -28,6 +28,7 @@ import { TaskFormInputs } from '../../types/TaskFormInputs';
 
 interface TaskFormProps {
     onSubmit: (body: TaskFormInputs) => void;
+    onClose: () => void;
 }
 
 const schema = yup.object({
@@ -36,11 +37,11 @@ const schema = yup.object({
         .date()
         .min(
             dayjs().subtract(1, 'day'),
-            'Дата не может быть меньше сегодняшней',
+            'Дата не может быть меньше сегодняшней'
         ),
 });
 
-export const TaskForm = ({ onSubmit }: TaskFormProps) => {
+export const TaskForm = ({ onSubmit, onClose }: TaskFormProps) => {
     const { token } = useAppSelector(auth);
 
     const { data: categories } = useGetAllCategoriesQuery({ token });
@@ -162,11 +163,20 @@ export const TaskForm = ({ onSubmit }: TaskFormProps) => {
                     );
                 }}
             />
-            <Box sx={{ display: 'flex', justifyContent: 'end', mt: 2 }}>
-                <Button variant="outlined" sx={{ mr: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'end', mt: 4 }}>
+                <Button
+                    disabled={isSubmitting}
+                    onClick={onClose}
+                    variant="outlined"
+                    sx={{ mr: 2 }}
+                >
                     Отмена
                 </Button>
-                <Button variant="contained" type="submit">
+                <Button
+                    disabled={isSubmitting}
+                    variant="contained"
+                    type="submit"
+                >
                     Создать задачу
                 </Button>
             </Box>
