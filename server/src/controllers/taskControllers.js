@@ -1,5 +1,4 @@
 import { Task } from '../models/Task.js';
-import { CategorySchema } from '../models/Category.js';
 
 export const create = async (req, res) => {
     try {
@@ -24,10 +23,18 @@ export const create = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
         const userId = req.userId;
+        const { category } = req.query;
 
-        const todos = await Task.find({
+        const searchParams = {
             owner: userId,
-        }).populate(['category', 'priority']);
+        };
+
+        if (category) searchParams.category = category;
+
+        const todos = await Task.find(searchParams).populate([
+            'category',
+            'priority',
+        ]);
 
         res.json(todos);
     } catch (error) {

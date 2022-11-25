@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useAppSelector } from '../../../hooks';
 import { auth } from '../../../store/slices/authSlice';
@@ -20,9 +20,13 @@ import { TaskItem } from '../TaskItem/TaskItem';
 
 export const TasksTable = () => {
     const { token } = useAppSelector(auth);
-    const location = useLocation();
+    const { id } = useParams();
 
-    const { data: tasks, isLoading, error } = useGetAllTasksQuery({ token });
+    const {
+        data: tasks,
+        isLoading,
+        error,
+    } = useGetAllTasksQuery({ token, category: id });
 
     if (error) {
         <Typography variant="h2">Ошибка при загрузке данных...</Typography>;

@@ -1,12 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_URL } from '../../constants/url';
+import { emptySplitApi } from './api';
+
 import { Priority } from '../../types/Priority';
 import { CreateAndUpdateFormInput } from '../../types/CreateAndUpdateFormInput';
 
-export const priorityApi = createApi({
-    reducerPath: 'priorityApi',
-    baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
-    tagTypes: ['Priority'],
+export const priorityApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
         createPriority: builder.mutation<
             Priority,
@@ -43,7 +40,7 @@ export const priorityApi = createApi({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Priority'],
+            invalidatesTags: ['Priority', 'Task'],
         }),
         deletePriority: builder.mutation<
             Priority,
@@ -56,7 +53,7 @@ export const priorityApi = createApi({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Priority'],
+            invalidatesTags: ['Priority', 'Task'],
         }),
     }),
 });

@@ -1,12 +1,8 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_URL } from '../../constants/url';
+import { emptySplitApi } from './api';
 import { Category } from '../../types/Category';
 import { CreateAndUpdateFormInput } from '../../types/CreateAndUpdateFormInput';
 
-export const categoriesApi = createApi({
-    reducerPath: 'categoriesApi',
-    baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
-    tagTypes: ['Category'],
+export const categoriesApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
         createCategory: builder.mutation<
             Category,
@@ -50,7 +46,7 @@ export const categoriesApi = createApi({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Category'],
+            invalidatesTags: ['Category', 'Task'],
         }),
         deleteCategory: builder.mutation<
             Category,
@@ -63,7 +59,7 @@ export const categoriesApi = createApi({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Category'],
+            invalidatesTags: ['Category', 'Task'],
         }),
     }),
 });

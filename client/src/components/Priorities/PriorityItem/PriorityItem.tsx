@@ -36,7 +36,7 @@ export const PriorityItem = ({
     };
 
     const handleUpdateColor = () => {
-        onUpdateColor(id, colorValue.current?.value || '#000000');
+        onUpdateColor(id, colorValue.current?.value || '#ffffff');
     };
 
     const handleDelete = () => {
@@ -67,7 +67,7 @@ export const PriorityItem = ({
                 <input
                     ref={colorValue}
                     onBlur={handleUpdateColor}
-                    defaultValue={color || '#000000'}
+                    defaultValue={color || '#ffffff'}
                     readOnly
                     type="color"
                 />

@@ -1,12 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { emptySplitApi } from './api';
 import { AuthFormInputs } from '../../types/AuthFormInputs';
-import { API_URL } from '../../constants/url';
 import { AuthResponse } from '../../types/AuthResponse';
 import { User } from '../../types/User';
 
-export const authApi = createApi({
-    reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
+export const authApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
         register: builder.mutation<AuthResponse, AuthFormInputs>({
             query: (body) => ({

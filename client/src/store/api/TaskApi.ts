@@ -1,12 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_URL } from '../../constants/url';
+import { emptySplitApi } from './api';
+
 import { Task } from '../../types/Task';
 import { TaskFormInputs } from '../../types/TaskFormInputs';
 
-export const taskApi = createApi({
-    reducerPath: 'taskApi',
-    baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
-    tagTypes: ['Task'],
+export const taskApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
         createTask: builder.mutation<
             Task,
@@ -27,7 +24,7 @@ export const taskApi = createApi({
             { token: string; category?: string }
         >({
             query: ({ token, category }) => ({
-                url: 'tasks',
+                url: `${category ? `tasks?category=${category}` : 'tasks'}`,
                 headers: {
                     authorization: `Bearer ${token}`,
                 },

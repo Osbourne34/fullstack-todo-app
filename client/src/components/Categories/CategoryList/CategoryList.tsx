@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAppSelector, useAppDispatch } from '../../../hooks';
 import { auth } from '../../../store/slices/authSlice';
 import {
-    useLazyGetAllCategoriesQuery,
+    useGetAllCategoriesQuery,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
 } from '../../../store/api/CategoriesApi';
@@ -41,18 +41,15 @@ export const CategoryList = () => {
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const [
-        getAllCategories,
-        { data: categories, isFetching: categoryLoading, error },
-    ] = useLazyGetAllCategoriesQuery();
+    const {
+        data: categories,
+        isFetching: categoryLoading,
+        error,
+    } = useGetAllCategoriesQuery({ token, searchValue });
     const [updateCategory, { error: updateError, reset }] =
         useUpdateCategoryMutation();
     const [deleteCategory, { isLoading: loadingDelete }] =
         useDeleteCategoryMutation();
-
-    useEffect(() => {
-        getAllCategories({ token, searchValue });
-    }, [getAllCategories, token, searchValue]);
 
     const submitUpdate = async ({ title }: CreateAndUpdateFormInput) => {
         await updateCategory({

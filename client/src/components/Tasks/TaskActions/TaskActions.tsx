@@ -6,7 +6,11 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Checkbox from '@mui/material/Checkbox';
 
-export const TaskActions = () => {
+interface TaskActionsProps {
+    completed: boolean;
+}
+
+export const TaskActions = ({ completed }: TaskActionsProps) => {
     return (
         <>
             <IconButton>
@@ -15,7 +19,7 @@ export const TaskActions = () => {
             <IconButton color="error" sx={{ mx: 1 }}>
                 <DeleteRoundedIcon />
             </IconButton>
-            <Checkbox />
+            <Checkbox checked={completed} />
         </>
     );
 };

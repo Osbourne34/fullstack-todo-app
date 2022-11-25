@@ -45,7 +45,7 @@ export const TaskItem = ({
             <TableCell>{category?.title || 'Без категорий'}</TableCell>
             <TableCell>{priority?.title || 'Без приоритета'}</TableCell>
             <TableCell align="right">
-                <TaskActions />
+                <TaskActions completed={completed} />
             </TableCell>
         </TableRow>
     );
