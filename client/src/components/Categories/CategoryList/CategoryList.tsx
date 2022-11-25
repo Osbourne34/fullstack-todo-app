@@ -8,6 +8,7 @@ import {
     useGetAllCategoriesQuery,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
+    categoriesApi,
 } from '../../../store/api/CategoriesApi';
 import {
     category,
@@ -43,7 +44,7 @@ export const CategoryList = () => {
 
     const {
         data: categories,
-        isFetching: categoryLoading,
+        isLoading: categoryLoading,
         error,
     } = useGetAllCategoriesQuery({ token, searchValue });
     const [updateCategory, { error: updateError, reset }] =
@@ -59,6 +60,9 @@ export const CategoryList = () => {
         })
             .unwrap()
             .then(() => {
+                dispatch(
+                    categoriesApi.util.invalidateTags(['Category', 'Task']),
+                );
                 handleCloseDialog();
                 enqueueSnackbar('Категория обновлена', { variant: 'info' });
             });
@@ -68,6 +72,9 @@ export const CategoryList = () => {
         deleteCategory({ id: idToDelete, token })
             .unwrap()
             .then(() => {
+                dispatch(
+                    categoriesApi.util.invalidateTags(['Category', 'Task']),
+                );
                 if (pathname.slice(1) === idToDelete) {
                     navigate('/');
                 }

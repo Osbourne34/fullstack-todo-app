@@ -42,8 +42,16 @@ export const TaskItem = ({
             <TableCell>1</TableCell>
             <TableCell>{title}</TableCell>
             <TableCell>{`${dayjs(deadline).format('YYYY-MM-DD')}`}</TableCell>
-            <TableCell>{category?.title || 'Без категорий'}</TableCell>
-            <TableCell>{priority?.title || 'Без приоритета'}</TableCell>
+            <TableCell
+                sx={{ '&:first-letter': { textTransform: 'uppercase' } }}
+            >
+                {category?.title || 'Без категорий'}
+            </TableCell>
+            <TableCell
+                sx={{ '&:first-letter': { textTransform: 'uppercase' } }}
+            >
+                {priority?.title || 'Без приоритета'}
+            </TableCell>
             <TableCell align="right">
                 <TaskActions completed={completed} />
             </TableCell>

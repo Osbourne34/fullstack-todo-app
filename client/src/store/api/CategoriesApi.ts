@@ -4,20 +4,6 @@ import { CreateAndUpdateFormInput } from '../../types/CreateAndUpdateFormInput';
 
 export const categoriesApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
-        createCategory: builder.mutation<
-            Category,
-            { body: CreateAndUpdateFormInput; token: string }
-        >({
-            query: ({ body, token }) => ({
-                url: 'category',
-                method: 'POST',
-                body,
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            }),
-            invalidatesTags: ['Category'],
-        }),
         getAllCategories: builder.query<
             Category[],
             { token: string; searchValue?: string }
@@ -34,6 +20,20 @@ export const categoriesApi = emptySplitApi.injectEndpoints({
             }),
             providesTags: ['Category'],
         }),
+        createCategory: builder.mutation<
+            Category,
+            { body: CreateAndUpdateFormInput; token: string }
+        >({
+            query: ({ body, token }) => ({
+                url: 'category',
+                method: 'POST',
+                body,
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }),
+        }),
+
         updateCategory: builder.mutation<
             Category,
             { id: string; body: CreateAndUpdateFormInput; token: string }
@@ -46,7 +46,6 @@ export const categoriesApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Category', 'Task'],
         }),
         deleteCategory: builder.mutation<
             Category,
