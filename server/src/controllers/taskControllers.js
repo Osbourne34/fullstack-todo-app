@@ -42,3 +42,24 @@ export const getAll = async (req, res) => {
         res.status(500).json({ message: 'Произошла ошибка', error });
     }
 };
+
+export const update = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { id } = req.params;
+
+        const updated = await Task.findOneAndUpdate(
+            {
+                owner: userId,
+                _id: id,
+            },
+            { ...req.body },
+            { new: true }
+        );
+
+        res.json(updated);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Произошла ошибка', error });
+    }
+};

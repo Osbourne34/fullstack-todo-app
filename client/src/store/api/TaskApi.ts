@@ -5,6 +5,18 @@ import { TaskFormInputs } from '../../types/TaskFormInputs';
 
 export const taskApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
+        getAllTasks: builder.query<
+            Task[],
+            { token: string; category?: string }
+        >({
+            query: ({ token, category }) => ({
+                url: `${category ? `tasks?category=${category}` : 'tasks'}`,
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }),
+            providesTags: ['Task'],
+        }),
         createTask: builder.mutation<
             Task,
             { body: TaskFormInputs; token: string }
@@ -19,19 +31,29 @@ export const taskApi = emptySplitApi.injectEndpoints({
             }),
             invalidatesTags: ['Task'],
         }),
-        getAllTasks: builder.query<
-            Task[],
-            { token: string; category?: string }
+        updateTask: builder.mutation<
+            Task,
+            {
+                id: string;
+                token: string;
+                body: { [key: string]: string | boolean };
+            }
         >({
-            query: ({ token, category }) => ({
-                url: `${category ? `tasks?category=${category}` : 'tasks'}`,
+            query: ({ id, token, body }) => ({
+                url: `task/${id}`,
+                method: 'PATCH',
+                body,
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             }),
-            providesTags: ['Task'],
+            invalidatesTags: ['Task'],
         }),
     }),
 });
 
-export const { useCreateTaskMutation, useGetAllTasksQuery } = taskApi;
+export const {
+    useCreateTaskMutation,
+    useGetAllTasksQuery,
+    useUpdateTaskMutation,
+} = taskApi;

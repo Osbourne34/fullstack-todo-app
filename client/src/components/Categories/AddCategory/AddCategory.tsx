@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import {
-    categoriesApi,
-    useCreateCategoryMutation,
-} from '../../../store/api/CategoriesApi';
+import { useAppSelector } from '../../../hooks';
+import { useCreateCategoryMutation } from '../../../store/api/CategoriesApi';
 import { auth } from '../../../store/slices/authSlice';
 
 import { useSnackbar } from 'notistack';
@@ -20,7 +17,6 @@ import { CreateAndUpdateForm } from '../../../components';
 import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
 
 export const AddCategory = () => {
-    const dispatch = useAppDispatch();
     const { enqueueSnackbar } = useSnackbar();
     const { token } = useAppSelector(auth);
     const [createCategory, { error, reset }] = useCreateCategoryMutation();
@@ -33,7 +29,6 @@ export const AddCategory = () => {
         await createCategory({ body: { title }, token })
             .unwrap()
             .then(() => {
-                dispatch(categoriesApi.util.invalidateTags(['Category']));
                 setOpen(false);
                 enqueueSnackbar('Категория добавлена', { variant: 'success' });
             });

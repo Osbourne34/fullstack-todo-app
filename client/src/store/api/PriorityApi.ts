@@ -5,6 +5,15 @@ import { CreateAndUpdateFormInput } from '../../types/CreateAndUpdateFormInput';
 
 export const priorityApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
+        getAllPriorities: builder.query<Priority[], string>({
+            query: (token) => ({
+                url: 'priorities',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }),
+            providesTags: ['Priority'],
+        }),
         createPriority: builder.mutation<
             Priority,
             { body: CreateAndUpdateFormInput; token: string }
@@ -17,16 +26,12 @@ export const priorityApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Priority'],
-        }),
-        getAllPriorities: builder.query<Priority[], string>({
-            query: (token) => ({
-                url: 'priorities',
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            }),
-            providesTags: ['Priority'],
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(priorityApi.util.invalidateTags(['Priority']));
+                } catch (error) {}
+            },
         }),
         updatePriority: builder.mutation<
             Priority,
@@ -40,7 +45,14 @@ export const priorityApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Priority', 'Task'],
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(
+                        priorityApi.util.invalidateTags(['Priority', 'Task'])
+                    );
+                } catch (error) {}
+            },
         }),
         deletePriority: builder.mutation<
             Priority,
@@ -53,7 +65,14 @@ export const priorityApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Priority', 'Task'],
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(
+                        priorityApi.util.invalidateTags(['Priority', 'Task'])
+                    );
+                } catch (error) {}
+            },
         }),
     }),
 });

@@ -10,6 +10,7 @@ import { Category } from '../../../types/Category';
 import { Priority } from '../../../types/Priority';
 
 interface TaskItemProps {
+    _id: string;
     title: string;
     deadline: string;
     category: Category | null;
@@ -18,6 +19,7 @@ interface TaskItemProps {
 }
 
 export const TaskItem = ({
+    _id,
     title,
     deadline,
     category,
@@ -30,6 +32,7 @@ export const TaskItem = ({
                 '&:last-child td, &:last-child th': {
                     border: 0,
                 },
+                textDecoration: completed ? 'line-through' : '',
             }}
         >
             <TableCell
@@ -53,7 +56,7 @@ export const TaskItem = ({
                 {priority?.title || 'Без приоритета'}
             </TableCell>
             <TableCell align="right">
-                <TaskActions completed={completed} />
+                <TaskActions completed={completed} id={_id} />
             </TableCell>
         </TableRow>
     );

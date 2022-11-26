@@ -32,6 +32,12 @@ export const categoriesApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(categoriesApi.util.invalidateTags(['Category']));
+                } catch (error) {}
+            },
         }),
 
         updateCategory: builder.mutation<
@@ -46,6 +52,14 @@ export const categoriesApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(
+                        categoriesApi.util.invalidateTags(['Category', 'Task'])
+                    );
+                } catch (error) {}
+            },
         }),
         deleteCategory: builder.mutation<
             Category,
@@ -58,7 +72,14 @@ export const categoriesApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Category', 'Task'],
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(
+                        categoriesApi.util.invalidateTags(['Category', 'Task'])
+                    );
+                } catch (error) {}
+            },
         }),
     }),
 });
