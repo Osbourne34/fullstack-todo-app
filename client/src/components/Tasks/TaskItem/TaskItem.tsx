@@ -2,6 +2,13 @@ import React from 'react';
 
 import dayjs from 'dayjs';
 
+import { useAppDispatch } from '../../../hooks';
+import {
+    setIdToUpdate,
+    setDataToUpdate,
+    setIdToDelete,
+} from '../../../store/slices/taskSlice';
+
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
@@ -26,6 +33,24 @@ export const TaskItem = ({
     priority,
     completed,
 }: TaskItemProps) => {
+    const dispatch = useAppDispatch();
+
+    const handleUpdate = () => {
+        dispatch(setIdToUpdate(_id));
+        dispatch(
+            setDataToUpdate({
+                title,
+                deadline: dayjs(deadline).format('YYYY-MM-DD'),
+                category: category?._id || null,
+                priority: priority?._id || null,
+            }),
+        );
+    };
+
+    const handleDelete = () => {
+        dispatch(setIdToDelete(_id));
+    };
+
     return (
         <TableRow
             sx={{
@@ -42,7 +67,7 @@ export const TaskItem = ({
                     p: 0,
                 }}
             ></TableCell>
-            <TableCell>1</TableCell>
+            <TableCell>{_id}</TableCell>
             <TableCell>{title}</TableCell>
             <TableCell>{`${dayjs(deadline).format('YYYY-MM-DD')}`}</TableCell>
             <TableCell
@@ -56,7 +81,12 @@ export const TaskItem = ({
                 {priority?.title || 'Без приоритета'}
             </TableCell>
             <TableCell align="right">
-                <TaskActions completed={completed} id={_id} />
+                <TaskActions
+                    onUpdate={handleUpdate}
+                    onDelete={handleDelete}
+                    id={_id}
+                    completed={completed}
+                />
             </TableCell>
         </TableRow>
     );

@@ -7,6 +7,8 @@ import { useAppSelector } from '../../hooks';
 import { auth } from '../../store/slices/authSlice';
 import { useGetAllCategoriesQuery } from '../../store/api/CategoriesApi';
 import { useGetAllPrioritiesQuery } from '../../store/api/PriorityApi';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
+import { SerializedError } from '@reduxjs/toolkit/dist/createAsyncThunk';
 
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,12 +25,21 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
 
 import { TaskFormInputs } from '../../types/TaskFormInputs';
+import { isErrorWithMessage } from '../../types/ErrorsApi';
 
 interface TaskFormProps {
     onSubmit: (body: TaskFormInputs) => void;
     onClose: () => void;
+    error: FetchBaseQueryError | SerializedError | undefined;
+    defaultValues?: {
+        title: string;
+        deadline: string;
+        category: string | null;
+        priority: string | null;
+    };
 }
 
 const schema = yup.object({
@@ -37,11 +48,16 @@ const schema = yup.object({
         .date()
         .min(
             dayjs().subtract(1, 'day'),
-            'Дата не может быть меньше сегодняшней'
+            'Дата не может быть меньше сегодняшней',
         ),
 });
 
-export const TaskForm = ({ onSubmit, onClose }: TaskFormProps) => {
+export const TaskForm = ({
+    onSubmit,
+    onClose,
+    error,
+    defaultValues,
+}: TaskFormProps) => {
     const { token } = useAppSelector(auth);
 
     const { data: categories } = useGetAllCategoriesQuery({ token });
@@ -53,13 +69,28 @@ export const TaskForm = ({ onSubmit, onClose }: TaskFormProps) => {
         formState: { errors, isSubmitting },
     } = useForm<TaskFormInputs>({
         defaultValues: {
-            deadline: dayjs().format('YYYY-MM-DD'),
+            title: defaultValues?.title || '',
+            deadline: defaultValues?.deadline
+                ? dayjs(defaultValues.deadline).format('YYYY-MM-DD')
+                : dayjs().format('YYYY-MM-DD'),
+            category: defaultValues?.category || '',
+            priority: defaultValues?.priority || '',
         },
         resolver: yupResolver(schema),
     });
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            {error && (
+                <Alert
+                    variant="filled"
+                    severity="error"
+                    sx={{ width: '100%', mb: 3 }}
+                >
+                    {(isErrorWithMessage(error) && error.data.message) ||
+                        'Ошибка при созданий категорий'}
+                </Alert>
+            )}
             <Controller
                 name="title"
                 control={control}
@@ -87,7 +118,6 @@ export const TaskForm = ({ onSubmit, onClose }: TaskFormProps) => {
                 <Controller
                     name="category"
                     control={control}
-                    defaultValue=""
                     render={({ field }) => (
                         <Select {...field}>
                             <MenuItem value="">Без категорий</MenuItem>
@@ -115,7 +145,6 @@ export const TaskForm = ({ onSubmit, onClose }: TaskFormProps) => {
                 <Controller
                     name="priority"
                     control={control}
-                    defaultValue=""
                     render={({ field }) => (
                         <Select {...field}>
                             <MenuItem value="">Без приоритета</MenuItem>

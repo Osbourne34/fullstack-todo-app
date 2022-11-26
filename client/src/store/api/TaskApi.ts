@@ -29,14 +29,19 @@ export const taskApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Task'],
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(taskApi.util.invalidateTags(['Category']));
+                } catch (error) {}
+            },
         }),
         updateTask: builder.mutation<
             Task,
             {
                 id: string;
                 token: string;
-                body: { [key: string]: string | boolean };
+                body: TaskFormInputs | { [key: string]: string | boolean };
             }
         >({
             query: ({ id, token, body }) => ({
@@ -47,7 +52,27 @@ export const taskApi = emptySplitApi.injectEndpoints({
                     authorization: `Bearer ${token}`,
                 },
             }),
-            invalidatesTags: ['Task'],
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(taskApi.util.invalidateTags(['Category']));
+                } catch (error) {}
+            },
+        }),
+        deleteTask: builder.mutation<Task, { id: string; token: string }>({
+            query: ({ id, token }) => ({
+                url: `task/${id}`,
+                method: 'DELETE',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }),
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(taskApi.util.invalidateTags(['Category']));
+                } catch (error) {}
+            },
         }),
     }),
 });
@@ -56,4 +81,5 @@ export const {
     useCreateTaskMutation,
     useGetAllTasksQuery,
     useUpdateTaskMutation,
+    useDeleteTaskMutation,
 } = taskApi;

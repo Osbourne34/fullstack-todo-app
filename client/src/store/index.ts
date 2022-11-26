@@ -4,6 +4,7 @@ import authReducer from './slices/authSlice';
 import uiReducer from './slices/uiSlice';
 import categoryReducer from './slices/categorySlice';
 import priorityReducer from './slices/prioritySlice';
+import taskReducer from './slices/taskSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         ui: uiReducer,
         category: categoryReducer,
         priority: priorityReducer,
+        task: taskReducer,
     },
 
     middleware: (getDefaultMiddleware) =>

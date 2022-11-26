@@ -15,40 +15,43 @@ import Checkbox from '@mui/material/Checkbox';
 interface TaskActionsProps {
     completed: boolean;
     id: string;
+    onUpdate: () => void;
+    onDelete: () => void;
 }
 
-export const TaskActions = ({ completed, id }: TaskActionsProps) => {
+export const TaskActions = ({
+    completed,
+    id,
+    onUpdate,
+    onDelete,
+}: TaskActionsProps) => {
     const { enqueueSnackbar } = useSnackbar();
     const { token } = useAppSelector(auth);
 
     const [updateTask, { isLoading }] = useUpdateTaskMutation();
 
-    const handleCheked = () => {
+    const handleCompleted = () => {
         updateTask({ id, token, body: { completed: !completed } })
             .unwrap()
             .then((res) => {
                 enqueueSnackbar(
-                    `${
-                        res.completed
-                            ? 'Задача выполнена'
-                            : 'Задача не выполнена'
-                    }`,
-                    { variant: `${res.completed ? 'success' : 'error'}` }
+                    `${res.completed ? 'Задача выполнена' : 'Задача активна'}`,
+                    { variant: `${res.completed ? 'success' : 'info'}` },
                 );
             });
     };
 
     return (
         <>
-            <IconButton>
+            <IconButton onClick={onUpdate}>
                 <EditRoundedIcon />
             </IconButton>
-            <IconButton color="error" sx={{ mx: 1 }}>
+            <IconButton onClick={onDelete} color="error" sx={{ mx: 1 }}>
                 <DeleteRoundedIcon />
             </IconButton>
             <Checkbox
                 disabled={isLoading}
-                onChange={handleCheked}
+                onChange={handleCompleted}
                 checked={completed}
             />
         </>

@@ -19,7 +19,7 @@ export const AddTask = () => {
     const { enqueueSnackbar } = useSnackbar();
     const { token } = useAppSelector(auth);
 
-    const [createTask] = useCreateTaskMutation();
+    const [createTask, { error, reset }] = useCreateTaskMutation();
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -43,6 +43,7 @@ export const AddTask = () => {
     };
 
     const handleClose = () => {
+        reset();
         setOpen(false);
     };
 
@@ -56,7 +57,11 @@ export const AddTask = () => {
                 <DialogTitle>Добавление задачи</DialogTitle>
 
                 <DialogContent sx={{ overflow: 'visible' }}>
-                    <TaskForm onSubmit={handleSubmit} onClose={handleClose} />
+                    <TaskForm
+                        onSubmit={handleSubmit}
+                        onClose={handleClose}
+                        error={error}
+                    />
                 </DialogContent>
             </Dialog>
         </>

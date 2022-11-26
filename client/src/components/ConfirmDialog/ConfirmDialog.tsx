@@ -13,7 +13,7 @@ interface ConfirmDialogProps {
     confirm: () => void;
     loading: boolean;
     contentTitle: string;
-    contentSubtitle: string;
+    contentSubtitle?: string;
 }
 
 export const ConfirmDialog = ({
@@ -29,7 +29,8 @@ export const ConfirmDialog = ({
             <DialogTitle>Подтвердите действие</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    {contentTitle} <br />({contentSubtitle})
+                    {contentTitle} <br />
+                    {contentSubtitle ? `(${contentSubtitle})` : ''}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
