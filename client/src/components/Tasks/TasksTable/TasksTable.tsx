@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useParams } from 'react-router-dom';
 
@@ -25,6 +25,7 @@ import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
+import TablePagination from '@mui/material/TablePagination';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -43,11 +44,24 @@ export const TasksTable = () => {
     const { idToUpdate, dataToUpdate, idToDelete } = useAppSelector(task);
     const { id } = useParams();
 
+    const [rowsPerPage, setRowsPerPage] = useState<any>(5);
+    const [page, setPage] = useState<any>(0);
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+    const handleChangeRowsPerPage = (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
     const {
-        data: tasks,
+        data: tasksResponse,
         isLoading,
         error,
-    } = useGetAllTasksQuery({ token, category: id });
+    } = useGetAllTasksQuery({ token, category: id, limit: rowsPerPage, page });
     const [updateTask, { error: updateError, reset }] = useUpdateTaskMutation();
     const [deleteTask, { isLoading: loadingDelete }] = useDeleteTaskMutation();
 
@@ -70,6 +84,9 @@ export const TasksTable = () => {
         deleteTask({ token, id: idToDelete })
             .unwrap()
             .then(() => {
+                if (tasksResponse?.tasks.length === 1 && page !== 0) {
+                    setPage(page - 1);
+                }
                 handleCloseConfirm();
                 enqueueSnackbar('Задача удалена', { variant: 'error' });
             });
@@ -84,62 +101,75 @@ export const TasksTable = () => {
         dispatch(setIdToDelete(''));
     };
 
+    let content = null;
+
     if (error) {
-        <Typography variant="h2">Ошибка при загрузке данных...</Typography>;
+        content = (
+            <Typography variant="h2">Ошибка при загрузке данных...</Typography>
+        );
+    } else if (isLoading) {
+        content = <Loader />;
+    } else if (tasksResponse) {
+        content = (
+            <>
+                <TableContainer component={Paper} sx={{ mt: 2 }}>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell></TableCell>
+                                <TableCell>ID</TableCell>
+                                <TableCell>Название</TableCell>
+                                <TableCell>Срок</TableCell>
+                                <TableCell>Категория</TableCell>
+                                <TableCell>Приоритет</TableCell>
+                                <TableCell align="right">Действия</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {tasksResponse.tasks.map((task) => (
+                                <TaskItem key={task._id} {...task} />
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={tasksResponse.count}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+
+                <Dialog
+                    open={!!idToUpdate}
+                    onClose={handleCloseForm}
+                    maxWidth="sm"
+                    fullWidth
+                >
+                    <DialogTitle>Редактирование задачи</DialogTitle>
+
+                    <DialogContent sx={{ overflow: 'visible' }}>
+                        <TaskForm
+                            onSubmit={handleUpdate}
+                            onClose={handleCloseForm}
+                            error={updateError}
+                            defaultValues={dataToUpdate}
+                        />
+                    </DialogContent>
+                </Dialog>
+
+                <ConfirmDialog
+                    open={!!idToDelete}
+                    onClose={handleCloseConfirm}
+                    confirm={confirmDeletion}
+                    loading={loadingDelete}
+                    contentTitle="Вы действительно хотите удалить задачу?"
+                />
+            </>
+        );
     }
-
-    if (isLoading) {
-        return <Loader />;
-    }
-
-    return (
-        <>
-            <TableContainer component={Paper} sx={{ mt: 2 }}>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell>ID</TableCell>
-                            <TableCell>Название</TableCell>
-                            <TableCell>Срок</TableCell>
-                            <TableCell>Категория</TableCell>
-                            <TableCell>Приоритет</TableCell>
-                            <TableCell align="right">Действия</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {tasks?.map((task) => (
-                            <TaskItem key={task._id} {...task} />
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            <Dialog
-                open={!!idToUpdate}
-                onClose={handleCloseForm}
-                maxWidth="sm"
-                fullWidth
-            >
-                <DialogTitle>Редактирование задачи</DialogTitle>
-
-                <DialogContent sx={{ overflow: 'visible' }}>
-                    <TaskForm
-                        onSubmit={handleUpdate}
-                        onClose={handleCloseForm}
-                        error={updateError}
-                        defaultValues={dataToUpdate}
-                    />
-                </DialogContent>
-            </Dialog>
-
-            <ConfirmDialog
-                open={!!idToDelete}
-                onClose={handleCloseConfirm}
-                confirm={confirmDeletion}
-                loading={loadingDelete}
-                contentTitle="Вы действительно хотите удалить задачу?"
-            />
-        </>
-    );
+    return content;
 };

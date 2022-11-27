@@ -1,16 +1,18 @@
 import { emptySplitApi } from './api';
 
 import { Task } from '../../types/Task';
+import { TasksResponse } from '../../types/TasksResponse';
 import { TaskFormInputs } from '../../types/TaskFormInputs';
 
 export const taskApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllTasks: builder.query<
-            Task[],
-            { token: string; category?: string }
+            TasksResponse,
+            { token: string; category?: string; limit: number; page: number }
         >({
-            query: ({ token, category }) => ({
-                url: `${category ? `tasks?category=${category}` : 'tasks'}`,
+            query: ({ token, category, limit, page }) => ({
+                url: `tasks?limit=${limit}&page=${page}`,
+                // url: `${category ? `tasks?category=${category}` : 'tasks'}`,
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
@@ -32,7 +34,7 @@ export const taskApi = emptySplitApi.injectEndpoints({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
-                    dispatch(taskApi.util.invalidateTags(['Category']));
+                    dispatch(taskApi.util.invalidateTags(['Task']));
                 } catch (error) {}
             },
         }),
@@ -55,7 +57,7 @@ export const taskApi = emptySplitApi.injectEndpoints({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
-                    dispatch(taskApi.util.invalidateTags(['Category']));
+                    dispatch(taskApi.util.invalidateTags(['Task']));
                 } catch (error) {}
             },
         }),
@@ -70,7 +72,7 @@ export const taskApi = emptySplitApi.injectEndpoints({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
-                    dispatch(taskApi.util.invalidateTags(['Category']));
+                    dispatch(taskApi.util.invalidateTags(['Task']));
                 } catch (error) {}
             },
         }),
