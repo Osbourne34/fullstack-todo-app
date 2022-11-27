@@ -23,7 +23,7 @@ export const create = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
         const userId = req.userId;
-        const { category } = req.query;
+        const { category, limit, page } = req.query;
 
         const searchParams = {
             owner: userId,
@@ -31,12 +31,14 @@ export const getAll = async (req, res) => {
 
         if (category) searchParams.category = category;
 
-        const todos = await Task.find(searchParams).populate([
-            'category',
-            'priority',
-        ]);
+        const tasks = await Task.find(searchParams)
+            .limit(limit)
+            .skip(limit * page)
+            .populate(['category', 'priority']);
 
-        res.json(todos);
+        const count = await Task.countDocuments();
+
+        res.json({ tasks, count });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Произошла ошибка', error });
@@ -54,10 +56,26 @@ export const update = async (req, res) => {
                 _id: id,
             },
             { ...req.body },
-            { new: true }
+            { new: true },
         );
 
         res.json(updated);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Произошла ошибка', error });
+    }
+};
+
+export const remove = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { id } = req.params;
+
+        const deleted = await Task.findOneAndDelete({
+            owner: userId,
+            _id: id,
+        });
+        res.json(deleted);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Произошла ошибка', error });
