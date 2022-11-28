@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { useAppSelector } from '../../hooks';
+import { auth } from '../../store/slices/authSlice';
+import { useInCompletedTasksQuery } from '../../store/api/TaskApi';
+
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
@@ -12,6 +16,9 @@ import {
 } from '../Categories';
 
 export const Sidebar = React.memo(() => {
+    const { token } = useAppSelector(auth);
+    const { data: inCompleteTasks } = useInCompletedTasksQuery(token);
+
     return (
         <Box
             sx={{
@@ -36,7 +43,12 @@ export const Sidebar = React.memo(() => {
                 <SearchCategory />
             </Box>
 
-            <CategoryItem link="/" title="Все" editable={false} />
+            <CategoryItem
+                link="/"
+                title="Все"
+                editable={false}
+                inCompleteTasks={inCompleteTasks || 0}
+            />
 
             <Divider sx={{ my: 2 }} />
 

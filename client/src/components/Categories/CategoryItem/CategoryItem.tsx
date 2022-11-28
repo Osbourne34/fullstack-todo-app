@@ -21,9 +21,15 @@ interface CategoryItemProps {
     link: string;
     title: string;
     editable: boolean;
+    inCompleteTasks: number;
 }
 
-export const CategoryItem = ({ link, title, editable }: CategoryItemProps) => {
+export const CategoryItem = ({
+    link,
+    title,
+    editable,
+    inCompleteTasks,
+}: CategoryItemProps) => {
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -68,7 +74,7 @@ export const CategoryItem = ({ link, title, editable }: CategoryItemProps) => {
                         bgcolor: 'grey.200',
                     }}
                 >
-                    1
+                    {`${inCompleteTasks}`}
                 </Paper>
             </Box>
         </Box>

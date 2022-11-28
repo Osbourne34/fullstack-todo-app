@@ -11,8 +11,21 @@ export const taskApi = emptySplitApi.injectEndpoints({
             { token: string; category?: string; limit: number; page: number }
         >({
             query: ({ token, category, limit, page }) => ({
-                url: `tasks?limit=${limit}&page=${page}`,
-                // url: `${category ? `tasks?category=${category}` : 'tasks'}`,
+                url: `tasks`,
+                params: {
+                    category: category || '',
+                    limit,
+                    page,
+                },
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }),
+            providesTags: ['Task'],
+        }),
+        inCompletedTasks: builder.query<number, string>({
+            query: (token) => ({
+                url: 'inCompletedTasks',
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
@@ -82,6 +95,7 @@ export const taskApi = emptySplitApi.injectEndpoints({
 export const {
     useCreateTaskMutation,
     useGetAllTasksQuery,
+    useInCompletedTasksQuery,
     useUpdateTaskMutation,
     useDeleteTaskMutation,
 } = taskApi;

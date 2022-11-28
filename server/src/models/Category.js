@@ -12,6 +12,10 @@ export const CategorySchema = new Schema({
         ref: 'User',
         required: true,
     },
+    inCompleteTasks: {
+        type: Number,
+        default: 0,
+    },
 });
 
 export const Category = model('Category', CategorySchema);

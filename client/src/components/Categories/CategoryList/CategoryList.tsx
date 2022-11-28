@@ -97,8 +97,14 @@ export const CategoryList = () => {
     return (
         <>
             {categories &&
-                categories.map(({ _id, title }) => (
-                    <CategoryItem key={_id} link={_id} title={title} editable />
+                categories.map(({ _id, title, inCompleteTasks }) => (
+                    <CategoryItem
+                        key={_id}
+                        link={_id}
+                        title={title}
+                        inCompleteTasks={inCompleteTasks}
+                        editable
+                    />
                 ))}
 
             <Dialog

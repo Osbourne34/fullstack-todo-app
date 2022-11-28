@@ -1,4 +1,5 @@
 import { Category } from '../models/Category.js';
+import { Task } from '../models/Task.js';
 
 export const create = async (req, res) => {
     try {
@@ -24,23 +25,39 @@ export const create = async (req, res) => {
 };
 
 export const getAll = async (req, res) => {
+    const { userId } = req;
     const { search } = req.query;
     const searchValue = new RegExp(search, 'i');
 
+    const searchParams = {
+        owner: userId,
+    };
+
+    if (search) {
+        searchParams.title = searchValue;
+    }
+
     try {
-        const { userId } = req;
-        if (search) {
-            const foundCategories = await Category.find({
-                owner: userId,
-                title: searchValue,
-            });
-            res.json(foundCategories);
-        } else {
-            const categories = await Category.find({
-                owner: userId,
-            });
-            res.json(categories);
-        }
+        const tasks = await Task.find({
+            completed: false,
+            category: { $ne: null },
+        });
+        const categories = await Category.find(searchParams).transform(
+            (res) => {
+                return res.map((category) => {
+                    const inCompleted = tasks.filter(
+                        (task) =>
+                            String(task.category) === String(category._id),
+                    );
+                    return {
+                        ...category._doc,
+                        inCompleteTasks: inCompleted.length,
+                    };
+                });
+            },
+        );
+
+        res.json(categories);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Произошла ошибка', error });

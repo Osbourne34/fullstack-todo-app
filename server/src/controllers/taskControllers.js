@@ -36,9 +36,23 @@ export const getAll = async (req, res) => {
             .skip(limit * page)
             .populate(['category', 'priority']);
 
-        const count = await Task.countDocuments();
+        const count = await Task.countDocuments(searchParams);
 
         res.json({ tasks, count });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Произошла ошибка', error });
+    }
+};
+
+export const getInCompletedTasks = async (req, res) => {
+    const userId = req.userId;
+    try {
+        const inCompletedTasks = await Task.find({
+            owner: userId,
+            completed: false,
+        }).countDocuments();
+        res.json(inCompletedTasks);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Произошла ошибка', error });
