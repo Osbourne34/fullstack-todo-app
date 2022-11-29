@@ -51,7 +51,7 @@ export const TasksTable = () => {
         setPage(newPage);
     };
     const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement>,
+        event: React.ChangeEvent<HTMLInputElement>
     ) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
@@ -156,6 +156,7 @@ export const TasksTable = () => {
                             onSubmit={handleUpdate}
                             onClose={handleCloseForm}
                             error={updateError}
+                            buttonText="Сохранить задачу"
                             defaultValues={dataToUpdate}
                         />
                     </DialogContent>

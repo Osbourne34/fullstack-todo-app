@@ -47,7 +47,7 @@ export const taskApi = emptySplitApi.injectEndpoints({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
-                    dispatch(taskApi.util.invalidateTags(['Task']));
+                    dispatch(taskApi.util.invalidateTags(['Task', 'Category']));
                 } catch (error) {}
             },
         }),
@@ -56,7 +56,7 @@ export const taskApi = emptySplitApi.injectEndpoints({
             {
                 id: string;
                 token: string;
-                body: TaskFormInputs | { [key: string]: string | boolean };
+                body: TaskFormInputs;
             }
         >({
             query: ({ id, token, body }) => ({
@@ -70,7 +70,26 @@ export const taskApi = emptySplitApi.injectEndpoints({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
-                    dispatch(taskApi.util.invalidateTags(['Task']));
+                    dispatch(taskApi.util.invalidateTags(['Task', 'Category']));
+                } catch (error) {}
+            },
+        }),
+        switchTaskExecutionTask: builder.mutation<
+            Task,
+            { id: string; token: string; completed: boolean }
+        >({
+            query: ({ id, token, completed }) => ({
+                url: `switchTaskExecution/${id}`,
+                method: 'PATCH',
+                body: { completed },
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }),
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(taskApi.util.invalidateTags(['Task', 'Category']));
                 } catch (error) {}
             },
         }),
@@ -85,7 +104,7 @@ export const taskApi = emptySplitApi.injectEndpoints({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
-                    dispatch(taskApi.util.invalidateTags(['Task']));
+                    dispatch(taskApi.util.invalidateTags(['Task', 'Category']));
                 } catch (error) {}
             },
         }),
@@ -97,5 +116,6 @@ export const {
     useGetAllTasksQuery,
     useInCompletedTasksQuery,
     useUpdateTaskMutation,
+    useSwitchTaskExecutionTaskMutation,
     useDeleteTaskMutation,
 } = taskApi;

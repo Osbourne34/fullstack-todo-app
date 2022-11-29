@@ -34,6 +34,7 @@ interface TaskFormProps {
     onSubmit: (body: TaskFormInputs) => void;
     onClose: () => void;
     error: FetchBaseQueryError | SerializedError | undefined;
+    buttonText: string;
     defaultValues?: {
         title: string;
         deadline: string;
@@ -48,7 +49,7 @@ const schema = yup.object({
         .date()
         .min(
             dayjs().subtract(1, 'day'),
-            'Дата не может быть меньше сегодняшней',
+            'Дата не может быть меньше сегодняшней'
         ),
 });
 
@@ -56,6 +57,7 @@ export const TaskForm = ({
     onSubmit,
     onClose,
     error,
+    buttonText,
     defaultValues,
 }: TaskFormProps) => {
     const { token } = useAppSelector(auth);
@@ -206,7 +208,7 @@ export const TaskForm = ({
                     variant="contained"
                     type="submit"
                 >
-                    Создать задачу
+                    {buttonText}
                 </Button>
             </Box>
         </form>

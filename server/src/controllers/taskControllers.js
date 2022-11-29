@@ -70,7 +70,29 @@ export const update = async (req, res) => {
                 _id: id,
             },
             { ...req.body },
-            { new: true },
+            { new: true }
+        );
+
+        res.json(updated);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Произошла ошибка', error });
+    }
+};
+
+export const switchTaskExecution = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { id } = req.params;
+        const { completed } = req.body;
+
+        const updated = await Task.findOneAndUpdate(
+            {
+                owner: userId,
+                _id: id,
+            },
+            { completed },
+            { new: true }
         );
 
         res.json(updated);

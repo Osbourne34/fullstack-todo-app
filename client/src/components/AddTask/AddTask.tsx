@@ -61,6 +61,7 @@ export const AddTask = () => {
                         onSubmit={handleSubmit}
                         onClose={handleClose}
                         error={error}
+                        buttonText="Создать задачу"
                     />
                 </DialogContent>
             </Dialog>

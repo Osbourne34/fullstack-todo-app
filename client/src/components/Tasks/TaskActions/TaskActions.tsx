@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAppSelector } from '../../../hooks';
 import { auth } from '../../../store/slices/authSlice';
-import { useUpdateTaskMutation } from '../../../store/api/TaskApi';
+import { useSwitchTaskExecutionTaskMutation } from '../../../store/api/TaskApi';
 
 import { useSnackbar } from 'notistack';
 
@@ -28,15 +28,16 @@ export const TaskActions = ({
     const { enqueueSnackbar } = useSnackbar();
     const { token } = useAppSelector(auth);
 
-    const [updateTask, { isLoading }] = useUpdateTaskMutation();
+    const [switchTaskExecution, { isLoading }] =
+        useSwitchTaskExecutionTaskMutation();
 
     const handleCompleted = () => {
-        updateTask({ id, token, body: { completed: !completed } })
+        switchTaskExecution({ id, token, completed: !completed })
             .unwrap()
             .then((res) => {
                 enqueueSnackbar(
                     `${res.completed ? 'Задача выполнена' : 'Задача активна'}`,
-                    { variant: `${res.completed ? 'success' : 'info'}` },
+                    { variant: `${res.completed ? 'success' : 'info'}` }
                 );
             });
     };
