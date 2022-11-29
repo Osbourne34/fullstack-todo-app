@@ -23,13 +23,19 @@ export const create = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
         const userId = req.userId;
-        const { category, limit, page } = req.query;
+        const { category, limit, page, searchValue, completed, priority } =
+            req.query;
+        const search = new RegExp(searchValue, 'i');
 
         const searchParams = {
             owner: userId,
         };
 
         if (category) searchParams.category = category;
+        if (searchValue) searchParams.title = search;
+        if (completed)
+            searchParams.completed = completed === 'true' ? true : false;
+        if (priority) searchParams.priority = priority;
 
         const tasks = await Task.find(searchParams)
             .limit(limit)
@@ -70,7 +76,7 @@ export const update = async (req, res) => {
                 _id: id,
             },
             { ...req.body },
-            { new: true }
+            { new: true },
         );
 
         res.json(updated);
@@ -92,7 +98,7 @@ export const switchTaskExecution = async (req, res) => {
                 _id: id,
             },
             { completed },
-            { new: true }
+            { new: true },
         );
 
         res.json(updated);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useParams } from 'react-router-dom';
 
@@ -8,6 +8,8 @@ import {
     task,
     setIdToUpdate,
     setIdToDelete,
+    setPage,
+    setLimit,
 } from '../../../store/slices/taskSlice';
 import {
     useGetAllTasksQuery,
@@ -41,19 +43,25 @@ export const TasksTable = () => {
 
     const dispatch = useAppDispatch();
     const { token } = useAppSelector(auth);
-    const { idToUpdate, dataToUpdate, idToDelete } = useAppSelector(task);
+    const {
+        idToUpdate,
+        dataToUpdate,
+        idToDelete,
+        page,
+        limit,
+        searchValue,
+        completed,
+        priority,
+    } = useAppSelector(task);
     const { id } = useParams();
 
-    const [rowsPerPage, setRowsPerPage] = useState<any>(5);
-    const [page, setPage] = useState<any>(0);
-
     const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
+        dispatch(setPage(newPage));
     };
     const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement>
+        event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
+        dispatch(setLimit(parseInt(event.target.value, 10)));
         setPage(0);
     };
 
@@ -61,7 +69,15 @@ export const TasksTable = () => {
         data: tasksResponse,
         isLoading,
         error,
-    } = useGetAllTasksQuery({ token, category: id, limit: rowsPerPage, page });
+    } = useGetAllTasksQuery({
+        token,
+        category: id,
+        limit,
+        page,
+        searchValue,
+        completed,
+        priority,
+    });
     const [updateTask, { error: updateError, reset }] = useUpdateTaskMutation();
     const [deleteTask, { isLoading: loadingDelete }] = useDeleteTaskMutation();
 
@@ -137,7 +153,7 @@ export const TasksTable = () => {
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={tasksResponse.count}
-                    rowsPerPage={rowsPerPage}
+                    rowsPerPage={limit}
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}

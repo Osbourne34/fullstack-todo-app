@@ -8,14 +8,33 @@ export const taskApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllTasks: builder.query<
             TasksResponse,
-            { token: string; category?: string; limit: number; page: number }
+            {
+                token: string;
+                category?: string;
+                limit: number;
+                page: number;
+                searchValue: string;
+                completed: string;
+                priority: string;
+            }
         >({
-            query: ({ token, category, limit, page }) => ({
+            query: ({
+                token,
+                category,
+                limit,
+                page,
+                searchValue,
+                completed,
+                priority,
+            }) => ({
                 url: `tasks`,
                 params: {
                     category: category || '',
                     limit,
                     page,
+                    searchValue,
+                    completed,
+                    priority,
                 },
                 headers: {
                     authorization: `Bearer ${token}`,

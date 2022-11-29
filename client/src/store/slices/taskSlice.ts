@@ -11,6 +11,11 @@ interface taskState {
         priority: string | null;
     };
     idToDelete: string;
+    page: number;
+    limit: number;
+    searchValue: string;
+    completed: string;
+    priority: string;
 }
 
 const initialState: taskState = {
@@ -22,6 +27,11 @@ const initialState: taskState = {
         priority: '',
     },
     idToDelete: '',
+    page: 0,
+    limit: 5,
+    searchValue: '',
+    completed: '',
+    priority: '',
 };
 
 export const taskSlice = createSlice({
@@ -45,11 +55,40 @@ export const taskSlice = createSlice({
         setIdToDelete(state, action: PayloadAction<string>) {
             state.idToDelete = action.payload;
         },
+        setPage(state, action: PayloadAction<number>) {
+            state.page = action.payload;
+        },
+        setLimit(state, action: PayloadAction<number>) {
+            state.limit = action.payload;
+        },
+        setSearchValue(state, action: PayloadAction<string>) {
+            state.searchValue = action.payload;
+        },
+        setCompleted(state, action: PayloadAction<string>) {
+            state.completed = action.payload;
+        },
+        setPriority(state, action: PayloadAction<string>) {
+            state.priority = action.payload;
+        },
+        clearFilter(state) {
+            state.searchValue = '';
+            state.completed = '';
+            state.priority = '';
+        },
     },
 });
 
-export const { setIdToUpdate, setDataToUpdate, setIdToDelete } =
-    taskSlice.actions;
+export const {
+    setIdToUpdate,
+    setDataToUpdate,
+    setIdToDelete,
+    setPage,
+    setLimit,
+    setSearchValue,
+    setCompleted,
+    setPriority,
+    clearFilter,
+} = taskSlice.actions;
 
 export const task = (state: RootState) => state.task;
 
