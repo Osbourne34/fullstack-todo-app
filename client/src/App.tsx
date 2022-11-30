@@ -13,7 +13,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { Main, Register, Login } from './pages';
 import { AuthLayout, ProtectedRoute, PublicRoute } from './components';
-import { TasksTable } from './components/Tasks';
 
 export const App = () => {
     const dispatch = useAppDispatch();
@@ -70,8 +69,7 @@ export const App = () => {
                                 </ProtectedRoute>
                             }
                         >
-                            <Route index element={<TasksTable />} />
-                            <Route path=":id" element={<TasksTable />} />
+                            <Route path=":id" element={<></>} />
                         </Route>
                         <Route
                             path="/register"

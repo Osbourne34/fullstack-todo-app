@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useAppSelector, useAppDispatch } from '../../../hooks';
 import { auth } from '../../../store/slices/authSlice';
@@ -53,13 +53,13 @@ export const TasksTable = () => {
         completed,
         priority,
     } = useAppSelector(task);
-    const { id } = useParams();
+    const { pathname } = useLocation();
 
     const handleChangePage = (event: unknown, newPage: number) => {
         dispatch(setPage(newPage));
     };
     const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement>,
+        event: React.ChangeEvent<HTMLInputElement>
     ) => {
         dispatch(setLimit(parseInt(event.target.value, 10)));
         setPage(0);
@@ -71,7 +71,7 @@ export const TasksTable = () => {
         error,
     } = useGetAllTasksQuery({
         token,
-        category: id,
+        category: pathname.slice(1),
         limit,
         page,
         searchValue,
@@ -128,28 +128,30 @@ export const TasksTable = () => {
     } else if (tasksResponse) {
         content = (
             <>
-                <TableContainer component={Paper} sx={{ mt: 2 }}>
-                    <Table size="small">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell></TableCell>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Название</TableCell>
-                                <TableCell>Срок</TableCell>
-                                <TableCell>Категория</TableCell>
-                                <TableCell>Приоритет</TableCell>
-                                <TableCell align="right">Действия</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tasksResponse.tasks.map((task) => (
-                                <TaskItem key={task._id} {...task} />
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell>ID</TableCell>
+                            <TableCell>Название</TableCell>
+                            <TableCell>Срок</TableCell>
+                            <TableCell>Категория</TableCell>
+                            <TableCell>Приоритет</TableCell>
+                            <TableCell align="right">Действия</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {tasksResponse.tasks.map((task) => (
+                            <TaskItem key={task._id} {...task} />
+                        ))}
+                    </TableBody>
+                </Table>
 
                 <TablePagination
+                    labelDisplayedRows={({ from, count, to }) =>
+                        `${from} - ${to} из ${count}`
+                    }
+                    labelRowsPerPage="Строк на странице"
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={tasksResponse.count}
@@ -188,5 +190,9 @@ export const TasksTable = () => {
             </>
         );
     }
-    return content;
+    return (
+        <TableContainer component={Paper} sx={{ mt: 4 }}>
+            {content}
+        </TableContainer>
+    );
 };

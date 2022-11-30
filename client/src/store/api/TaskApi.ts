@@ -3,6 +3,7 @@ import { emptySplitApi } from './api';
 import { Task } from '../../types/Task';
 import { TasksResponse } from '../../types/TasksResponse';
 import { TaskFormInputs } from '../../types/TaskFormInputs';
+import { TaskStatisticsResponse } from '../../types/TaskStatisticsResponse';
 
 export const taskApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -45,6 +46,21 @@ export const taskApi = emptySplitApi.injectEndpoints({
         inCompletedTasks: builder.query<number, string>({
             query: (token) => ({
                 url: 'inCompletedTasks',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }),
+            providesTags: ['Task'],
+        }),
+        taskStatistics: builder.query<
+            TaskStatisticsResponse,
+            { token: string; category?: string }
+        >({
+            query: ({ token, category }) => ({
+                url: 'taskStatistics',
+                params: {
+                    category: category || '',
+                },
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
@@ -134,6 +150,7 @@ export const {
     useCreateTaskMutation,
     useGetAllTasksQuery,
     useInCompletedTasksQuery,
+    useTaskStatisticsQuery,
     useUpdateTaskMutation,
     useSwitchTaskExecutionTaskMutation,
     useDeleteTaskMutation,

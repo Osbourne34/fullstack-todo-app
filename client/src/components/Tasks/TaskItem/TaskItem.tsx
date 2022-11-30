@@ -25,69 +25,73 @@ interface TaskItemProps {
     completed: boolean;
 }
 
-export const TaskItem = ({
-    _id,
-    title,
-    deadline,
-    category,
-    priority,
-    completed,
-}: TaskItemProps) => {
-    const dispatch = useAppDispatch();
+export const TaskItem = React.memo(
+    ({
+        _id,
+        title,
+        deadline,
+        category,
+        priority,
+        completed,
+    }: TaskItemProps) => {
+        const dispatch = useAppDispatch();
 
-    const handleUpdate = () => {
-        dispatch(setIdToUpdate(_id));
-        dispatch(
-            setDataToUpdate({
-                title,
-                deadline: dayjs(deadline).format('YYYY-MM-DD'),
-                category: category?._id || null,
-                priority: priority?._id || null,
-            }),
-        );
-    };
+        const handleUpdate = () => {
+            dispatch(setIdToUpdate(_id));
+            dispatch(
+                setDataToUpdate({
+                    title,
+                    deadline: dayjs(deadline).format('YYYY-MM-DD'),
+                    category: category?._id || null,
+                    priority: priority?._id || null,
+                })
+            );
+        };
 
-    const handleDelete = () => {
-        dispatch(setIdToDelete(_id));
-    };
+        const handleDelete = () => {
+            dispatch(setIdToDelete(_id));
+        };
 
-    return (
-        <TableRow
-            sx={{
-                '&:last-child td, &:last-child th': {
-                    border: 0,
-                },
-                textDecoration: completed ? 'line-through' : '',
-            }}
-        >
-            <TableCell
+        return (
+            <TableRow
                 sx={{
-                    width: 30,
-                    bgcolor: priority?.color || '#fff',
-                    p: 0,
+                    '&:last-child td, &:last-child th': {
+                        border: 0,
+                    },
+                    textDecoration: completed ? 'line-through' : '',
                 }}
-            ></TableCell>
-            <TableCell>{_id}</TableCell>
-            <TableCell>{title}</TableCell>
-            <TableCell>{`${dayjs(deadline).format('YYYY-MM-DD')}`}</TableCell>
-            <TableCell
-                sx={{ '&:first-letter': { textTransform: 'uppercase' } }}
             >
-                {category?.title || 'Без категорий'}
-            </TableCell>
-            <TableCell
-                sx={{ '&:first-letter': { textTransform: 'uppercase' } }}
-            >
-                {priority?.title || 'Без приоритета'}
-            </TableCell>
-            <TableCell align="right">
-                <TaskActions
-                    onUpdate={handleUpdate}
-                    onDelete={handleDelete}
-                    id={_id}
-                    completed={completed}
-                />
-            </TableCell>
-        </TableRow>
-    );
-};
+                <TableCell
+                    sx={{
+                        width: 30,
+                        bgcolor: priority?.color || '#fff',
+                        p: 0,
+                    }}
+                ></TableCell>
+                <TableCell>{_id}</TableCell>
+                <TableCell>{title}</TableCell>
+                <TableCell>{`${dayjs(deadline).format(
+                    'YYYY-MM-DD'
+                )}`}</TableCell>
+                <TableCell
+                    sx={{ '&:first-letter': { textTransform: 'uppercase' } }}
+                >
+                    {category?.title || 'Без категорий'}
+                </TableCell>
+                <TableCell
+                    sx={{ '&:first-letter': { textTransform: 'uppercase' } }}
+                >
+                    {priority?.title || 'Без приоритета'}
+                </TableCell>
+                <TableCell align="right">
+                    <TaskActions
+                        onUpdate={handleUpdate}
+                        onDelete={handleDelete}
+                        id={_id}
+                        completed={completed}
+                    />
+                </TableCell>
+            </TableRow>
+        );
+    }
+);

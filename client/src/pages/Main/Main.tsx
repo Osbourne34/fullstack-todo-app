@@ -1,5 +1,4 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 
@@ -8,7 +7,9 @@ import {
     Drawer,
     Header,
     Sidebar,
+    TasksTable,
     TasksFilter,
+    Statistics,
 } from '../../components';
 
 import { DRAWER_WIDTH } from '../../constants/ui';
@@ -26,17 +27,19 @@ export const Main = () => {
                     pt: 0,
                 }}
             >
+                <Statistics />
                 <Box
                     sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
+                        mt: 4,
                     }}
                 >
                     <TasksFilter />
                     <AddTask />
                 </Box>
-                <Outlet />
+                <TasksTable />
             </Box>
         </>
     );

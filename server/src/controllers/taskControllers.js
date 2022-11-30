@@ -65,6 +65,38 @@ export const getInCompletedTasks = async (req, res) => {
     }
 };
 
+export const taskStatistics = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { category } = req.query;
+
+        const searchParams = {
+            owner: userId,
+        };
+        if (category) searchParams.category = category;
+
+        const tasks = await Task.find(searchParams);
+
+        const count = tasks.length;
+        const completed = tasks.filter(({ completed }) => completed).length;
+        const inCompleted = count - completed;
+
+        const percentageOfCompleted = Math.trunc((100 / count) * completed);
+        const percentageOfInCompleted = Math.trunc((100 / count) * inCompleted);
+
+        res.json({
+            count,
+            completed,
+            inCompleted,
+            percentageOfCompleted,
+            percentageOfInCompleted,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Произошла ошибка', error });
+    }
+};
+
 export const update = async (req, res) => {
     try {
         const userId = req.userId;
@@ -76,7 +108,7 @@ export const update = async (req, res) => {
                 _id: id,
             },
             { ...req.body },
-            { new: true },
+            { new: true }
         );
 
         res.json(updated);
@@ -98,7 +130,7 @@ export const switchTaskExecution = async (req, res) => {
                 _id: id,
             },
             { completed },
-            { new: true },
+            { new: true }
         );
 
         res.json(updated);
