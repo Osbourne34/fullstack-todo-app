@@ -1,12 +1,10 @@
 import React from 'react';
 
+import { Outlet } from 'react-router-dom';
+
 import Container from '@mui/material/Container';
 
-interface AuthLayoutProps {
-    children: React.ReactNode;
-}
-
-export const AuthLayout = ({ children }: AuthLayoutProps) => {
+export const AuthLayout = () => {
     return (
         <Container
             maxWidth="sm"
@@ -17,7 +15,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
                 height: '100vh',
             }}
         >
-            {children}
+            <Outlet />
         </Container>
     );
 };

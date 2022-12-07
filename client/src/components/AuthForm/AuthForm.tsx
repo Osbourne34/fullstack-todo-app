@@ -9,9 +9,10 @@ import { AuthFormInputs } from '../../types/AuthFormInputs';
 
 interface AuthFormProps {
     onSubmit: (body: AuthFormInputs) => void;
+    buttonText?: string;
 }
 
-export const AuthForm = ({ onSubmit }: AuthFormProps) => {
+export const AuthForm = ({ onSubmit, buttonText }: AuthFormProps) => {
     const {
         handleSubmit,
         control,
@@ -31,6 +32,7 @@ export const AuthForm = ({ onSubmit }: AuthFormProps) => {
                         label="Логин"
                         helperText={errors.login?.message}
                         error={!!errors.login}
+                        autoFocus
                         fullWidth
                         {...field}
                     />
@@ -61,7 +63,7 @@ export const AuthForm = ({ onSubmit }: AuthFormProps) => {
                 fullWidth
                 sx={{ mt: 2 }}
             >
-                Войти
+                {buttonText}
             </Button>
         </form>
     );

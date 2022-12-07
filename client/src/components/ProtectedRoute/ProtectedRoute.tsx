@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     const { user } = useAppSelector(auth);
 
     if (!user) {
-        return <Navigate to="/login" />;
+        return <Navigate to="auth/login" />;
     }
 
     return <>{children}</>;

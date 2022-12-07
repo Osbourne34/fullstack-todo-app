@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import { Routes, Route } from 'react-router-dom';
-
 import { useAppDispatch } from './hooks';
-import { useLazyMeQuery } from './store/api/AuthApi';
 import { setAuth } from './store/slices/authSlice';
+import { useLazyMeQuery } from './store/api/AuthApi';
 
 import { SnackbarProvider } from 'notistack';
 
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { Main, Register, Login } from './pages';
-import { AuthLayout, ProtectedRoute, PublicRoute } from './components';
+import { Routing } from './pages';
 
 export const App = () => {
     const dispatch = useAppDispatch();
@@ -60,38 +57,7 @@ export const App = () => {
                     autoHideDuration={3000}
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 >
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={
-                                <ProtectedRoute>
-                                    <Main />
-                                </ProtectedRoute>
-                            }
-                        >
-                            <Route path=":id" element={<></>} />
-                        </Route>
-                        <Route
-                            path="/register"
-                            element={
-                                <AuthLayout>
-                                    <PublicRoute>
-                                        <Register />
-                                    </PublicRoute>
-                                </AuthLayout>
-                            }
-                        />
-                        <Route
-                            path="/login"
-                            element={
-                                <AuthLayout>
-                                    <PublicRoute>
-                                        <Login />
-                                    </PublicRoute>
-                                </AuthLayout>
-                            }
-                        />
-                    </Routes>
+                    <Routing />
                 </SnackbarProvider>
             )}
         </>

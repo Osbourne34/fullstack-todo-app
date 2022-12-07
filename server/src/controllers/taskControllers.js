@@ -81,8 +81,10 @@ export const taskStatistics = async (req, res) => {
         const completed = tasks.filter(({ completed }) => completed).length;
         const inCompleted = count - completed;
 
-        const percentageOfCompleted = Math.trunc((100 / count) * completed);
-        const percentageOfInCompleted = Math.trunc((100 / count) * inCompleted);
+        const percentageOfCompleted =
+            Math.trunc((100 / count) * completed) || 0;
+        const percentageOfInCompleted =
+            Math.trunc((100 / count) * inCompleted) || 0;
 
         res.json({
             count,

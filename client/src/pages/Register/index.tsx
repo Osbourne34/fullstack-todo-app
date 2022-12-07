@@ -3,7 +3,7 @@ import React from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks';
-import { useLoginMutation } from '../../store/api/AuthApi';
+import { useRegisterMutation } from '../../store/api/AuthApi';
 import { setAuth } from '../../store/slices/authSlice';
 
 import { useSnackbar } from 'notistack';
@@ -18,27 +18,27 @@ import { AuthForm } from '../../components';
 import { isErrorWithMessage } from '../../types/ErrorsApi';
 import { AuthFormInputs } from '../../types/AuthFormInputs';
 
-export const Login = () => {
+export const RegisterPage = () => {
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [login, { error }] = useLoginMutation();
+    const [register, { error }] = useRegisterMutation();
 
     const onSubmit = async (body: AuthFormInputs) => {
-        await login(body)
+        await register(body)
             .unwrap()
             .then((data) => {
                 localStorage.setItem('token', data.token);
                 dispatch(setAuth(data));
                 navigate('/', { replace: true });
-                enqueueSnackbar('Вы авторизованы', { variant: 'success' });
+                enqueueSnackbar('Вы зарегистрированы', { variant: 'success' });
             });
     };
 
     return (
         <>
             <Typography variant="h4" align="center" sx={{ mb: 4 }}>
-                Войти
+                Создание аккаунта
             </Typography>
 
             {error && (
@@ -48,7 +48,7 @@ export const Login = () => {
                     sx={{ width: '100%', mb: 3 }}
                 >
                     {(isErrorWithMessage(error) && error.data.message) ||
-                        'Ошибка при входе'}
+                        'Ошибка при созданий аккаунта'}
                 </Alert>
             )}
 
@@ -62,11 +62,13 @@ export const Login = () => {
                     mt: 2,
                 }}
             >
-                <Typography sx={{ mr: 1 }}>Нет аккаунта?</Typography>
-                <Link component={RouterLink} to="/register">
-                    Создать аккаунт
+                <Typography sx={{ mr: 1 }}>Есть аккаунт?</Typography>
+                <Link component={RouterLink} to="/auth/login">
+                    Войти
                 </Link>
             </Box>
         </>
     );
 };
+
+export default RegisterPage;

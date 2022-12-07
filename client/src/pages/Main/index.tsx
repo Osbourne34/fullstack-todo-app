@@ -14,7 +14,7 @@ import {
 
 import { DRAWER_WIDTH } from '../../constants/ui';
 
-export const Main = () => {
+export const MainPage = () => {
     return (
         <>
             <Drawer Component={Sidebar} />
