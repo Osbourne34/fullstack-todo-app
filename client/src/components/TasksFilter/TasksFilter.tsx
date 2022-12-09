@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { auth } from '../../store/slices/authSlice';
+import { useAuth } from '../../hooks';
 import {
     task,
     setSearchValue,
@@ -21,7 +21,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 export const TasksFilter = () => {
     const dispatch = useAppDispatch();
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
     const { searchValue, completed, priority } = useAppSelector(task);
     const { data } = useGetAllPrioritiesQuery(token);
 

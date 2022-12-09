@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { useAppSelector } from '../../hooks';
-import { auth } from '../../store/slices/authSlice';
+import { useAuth } from '../../hooks';
 import { useCreateTaskMutation } from '../../store/api/TaskApi';
 
 import { useSnackbar } from 'notistack';
@@ -17,7 +16,7 @@ import { TaskFormInputs } from '../../types/TaskFormInputs';
 
 export const AddTask = () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
 
     const [createTask, { error, reset }] = useCreateTaskMutation();
 

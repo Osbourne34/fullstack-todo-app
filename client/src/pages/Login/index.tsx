@@ -8,6 +8,8 @@ import Link from '@mui/material/Link';
 
 import { Login } from '../../features/auth';
 
+import { routes } from '../routes';
+
 export const LoginPage = () => {
     return (
         <>
@@ -26,7 +28,7 @@ export const LoginPage = () => {
                 }}
             >
                 <Typography sx={{ mr: 1 }}>Нет аккаунта?</Typography>
-                <Link component={RouterLink} to="/register">
+                <Link component={RouterLink} to={routes.register}>
                     Создать аккаунт
                 </Link>
             </Box>

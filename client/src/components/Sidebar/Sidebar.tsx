@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useAppSelector } from '../../hooks';
-import { auth } from '../../store/slices/authSlice';
+import { useAuth } from '../../hooks';
 import { useInCompletedTasksQuery } from '../../store/api/TaskApi';
 
 import Box from '@mui/material/Box';
@@ -16,7 +15,7 @@ import {
 } from '../Categories';
 
 export const Sidebar = React.memo(() => {
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
     const { data: inCompleteTasks } = useInCompletedTasksQuery(token);
 
     return (

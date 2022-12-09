@@ -2,18 +2,19 @@ import React from 'react';
 
 import { Navigate } from 'react-router-dom';
 
-import { useAppSelector } from '../../hooks';
-import { auth } from '../../store/slices/authSlice';
+import { useAuth } from '../../hooks';
+
+import { routes } from '../../pages/routes';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-    const { user } = useAppSelector(auth);
+    const { user } = useAuth();
 
     if (!user) {
-        return <Navigate to="/login" />;
+        return <Navigate to={routes.login} />;
     }
 
     return <>{children}</>;

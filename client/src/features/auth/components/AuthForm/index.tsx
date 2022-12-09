@@ -1,30 +1,47 @@
 import React from 'react';
 
+import * as yup from 'yup';
+
 import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
-import { AuthFormInputs } from '../../types/AuthFormInputs';
+import { AuthFormInputs } from '../../../../types/AuthFormInputs';
 
 interface AuthFormProps {
     onSubmit: (body: AuthFormInputs) => void;
-    buttonText?: string;
+    buttonText: string;
 }
+
+const schema = yup.object({
+    login: yup
+        .string()
+        .required('Обязательное поле')
+        .min(3, 'Минимум 3 символа')
+        .max(24, 'Максимум 24 символа'),
+    password: yup
+        .string()
+        .required('Обязательное поле')
+        .min(8, 'Минимум 8 символов')
+        .max(24, 'Максимум 24 символа'),
+});
 
 export const AuthForm = ({ onSubmit, buttonText }: AuthFormProps) => {
     const {
         handleSubmit,
         control,
         formState: { errors, isSubmitting },
-    } = useForm<AuthFormInputs>();
+    } = useForm<AuthFormInputs>({
+        resolver: yupResolver(schema),
+    });
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
                 name="login"
                 control={control}
-                rules={{ required: 'Обязательное поле' }}
                 render={({ field }) => (
                     <TextField
                         disabled={isSubmitting}
@@ -41,7 +58,6 @@ export const AuthForm = ({ onSubmit, buttonText }: AuthFormProps) => {
             <Controller
                 name="password"
                 control={control}
-                rules={{ required: 'Обязательное поле' }}
                 render={({ field }) => (
                     <TextField
                         disabled={isSubmitting}

@@ -13,11 +13,13 @@ import {
     TasksTable,
 } from '../components';
 
+import { routes } from './routes';
+
 export const Routing = () => {
     return (
         <Routes>
             <Route
-                path="/"
+                path={routes.main}
                 element={
                     <ProtectedRoute>
                         <MainPage />
@@ -29,7 +31,7 @@ export const Routing = () => {
             </Route>
             <Route element={<AuthLayout />}>
                 <Route
-                    path="register"
+                    path={routes.register}
                     element={
                         <PublicRoute>
                             <RegisterPage />
@@ -37,7 +39,7 @@ export const Routing = () => {
                     }
                 />
                 <Route
-                    path="login"
+                    path={routes.login}
                     element={
                         <PublicRoute>
                             <LoginPage />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useAppDispatch } from '../../hooks';
-import { logout } from '../../store/slices/authSlice';
+import { logout } from '../../features/auth';
 
 import { useSnackbar } from 'notistack';
 

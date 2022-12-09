@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-import { useAppSelector } from '../../../hooks';
+import { useAuth } from '../../../hooks';
 import { useCreateCategoryMutation } from '../../../store/api/CategoriesApi';
-import { auth } from '../../../store/slices/authSlice';
 
 import { useSnackbar } from 'notistack';
 
@@ -18,7 +17,7 @@ import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInpu
 
 export const AddCategory = () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
     const [createCategory, { error, reset }] = useCreateCategoryMutation();
 
     const [open, setOpen] = useState<boolean>(false);

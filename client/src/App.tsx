@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch } from './hooks';
-import { setAuth } from './store/slices/authSlice';
-import { useLazyMeQuery } from './features/auth';
+import { useLazyMeQuery, setAuth } from './features/auth';
 
 import { SnackbarProvider } from 'notistack';
 
@@ -25,7 +24,7 @@ export const App = () => {
                         setAuth({
                             user: response,
                             token: localStorage.getItem('token') as string,
-                        }),
+                        })
                     );
                 })
                 .catch(() => {

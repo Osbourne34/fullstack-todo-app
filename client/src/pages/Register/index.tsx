@@ -8,6 +8,8 @@ import Link from '@mui/material/Link';
 
 import { Register } from '../../features/auth';
 
+import { routes } from '../routes';
+
 export const RegisterPage = () => {
     return (
         <>
@@ -26,7 +28,7 @@ export const RegisterPage = () => {
                 }}
             >
                 <Typography sx={{ mr: 1 }}>Есть аккаунт?</Typography>
-                <Link component={RouterLink} to="/login">
+                <Link component={RouterLink} to={routes.login}>
                     Войти
                 </Link>
             </Box>

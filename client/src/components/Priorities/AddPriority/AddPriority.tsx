@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { useAppSelector } from '../../../hooks';
-import { auth } from '../../../store/slices/authSlice';
+import { useAuth } from '../../../hooks';
 import { useCreatePriorityMutation } from '../../../store/api/PriorityApi';
 
 import { useSnackbar } from 'notistack';
@@ -17,7 +16,7 @@ import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInpu
 
 export const AddPriority = () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
     const [open, setOpen] = useState<boolean>(false);
 
     const [createPriority, { error }] = useCreatePriorityMutation();

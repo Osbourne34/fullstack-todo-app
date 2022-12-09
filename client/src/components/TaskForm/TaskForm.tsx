@@ -3,8 +3,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import * as yup from 'yup';
 
-import { useAppSelector } from '../../hooks';
-import { auth } from '../../store/slices/authSlice';
+import { useAuth } from '../../hooks';
 import { useGetAllCategoriesQuery } from '../../store/api/CategoriesApi';
 import { useGetAllPrioritiesQuery } from '../../store/api/PriorityApi';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
@@ -60,7 +59,7 @@ export const TaskForm = ({
     buttonText,
     defaultValues,
 }: TaskFormProps) => {
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
 
     const { data: categories } = useGetAllCategoriesQuery({ token });
     const { data: priorities } = useGetAllPrioritiesQuery(token);

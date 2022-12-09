@@ -6,12 +6,14 @@ import { useSnackbar } from 'notistack';
 
 import { useAppDispatch } from '../../../../hooks';
 import { useRegisterMutation } from '../../api';
-import { setAuth } from '../../../../store/slices/authSlice';
+import { setAuth } from '../../slices';
 
-import { AuthForm } from '../../../../components';
+import { AuthForm } from '../AuthForm';
 
 import { isErrorWithMessage } from '../../../../types/ErrorsApi';
 import { AuthFormInputs } from '../../../../types/AuthFormInputs';
+
+import { routes } from '../../../../pages/routes';
 
 export const Register = () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -27,12 +29,12 @@ export const Register = () => {
                 variant: 'success',
             });
             dispatch(setAuth(response));
-            navigate('/', { replace: true });
+            navigate(routes.main, { replace: true });
         } catch (error) {
             enqueueSnackbar(
                 (isErrorWithMessage(error) && error.data.message) ||
                     'Ошибка при регистраций',
-                { variant: 'error' },
+                { variant: 'error' }
             );
         }
     };

@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useAppSelector } from '../../../hooks';
-import { auth } from '../../../store/slices/authSlice';
+import { useAuth } from '../../../hooks';
 import { useSwitchTaskExecutionTaskMutation } from '../../../store/api/TaskApi';
 
 import { useSnackbar } from 'notistack';
@@ -26,7 +25,7 @@ export const TaskActions = ({
     onDelete,
 }: TaskActionsProps) => {
     const { enqueueSnackbar } = useSnackbar();
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
 
     const [switchTaskExecution, { isLoading }] =
         useSwitchTaskExecutionTaskMutation();

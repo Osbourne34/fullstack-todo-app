@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { auth } from '../../../store/slices/authSlice';
+import { useAuth } from '../../../hooks';
 import {
     useGetAllPrioritiesQuery,
     useUpdatePriorityMutation,
@@ -30,7 +30,7 @@ import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInpu
 
 export const PriorityList = () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
     const { idToUpdateTitle, titleToUpdate, idToDelete } =
         useAppSelector(priority);
     const dispatch = useAppDispatch();

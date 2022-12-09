@@ -3,7 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useAppSelector, useAppDispatch } from '../../../hooks';
-import { auth } from '../../../store/slices/authSlice';
+import { useAuth } from '../../../hooks';
 import {
     task,
     setIdToUpdate,
@@ -42,7 +42,7 @@ export const TasksTable = () => {
     const { enqueueSnackbar } = useSnackbar();
 
     const dispatch = useAppDispatch();
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
     const {
         idToUpdate,
         dataToUpdate,
@@ -59,7 +59,7 @@ export const TasksTable = () => {
         dispatch(setPage(newPage));
     };
     const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement>,
+        event: React.ChangeEvent<HTMLInputElement>
     ) => {
         dispatch(setLimit(parseInt(event.target.value, 10)));
         setPage(0);

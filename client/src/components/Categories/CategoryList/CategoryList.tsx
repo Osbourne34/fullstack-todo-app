@@ -2,8 +2,8 @@ import React from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useAppSelector, useAppDispatch } from '../../../hooks';
-import { auth } from '../../../store/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useAuth } from '../../../hooks';
 import {
     useGetAllCategoriesQuery,
     useUpdateCategoryMutation,
@@ -31,11 +31,13 @@ import {
 
 import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
 
+import { routes } from '../../../pages/routes';
+
 export const CategoryList = () => {
     const { enqueueSnackbar } = useSnackbar();
     const { idToUpdate, titleToUpdate, idToDelete, searchValue } =
         useAppSelector(category);
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
     const dispatch = useAppDispatch();
 
     const { pathname } = useLocation();
@@ -69,7 +71,7 @@ export const CategoryList = () => {
             .unwrap()
             .then(() => {
                 if (pathname.slice(1) === idToDelete) {
-                    navigate('/');
+                    navigate(routes.main);
                 }
                 handleCloseConfirm();
                 enqueueSnackbar('Категория удалена', { variant: 'error' });

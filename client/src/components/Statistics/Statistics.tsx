@@ -2,8 +2,7 @@ import React from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { useAppSelector } from '../../hooks';
-import { auth } from '../../store/slices/authSlice';
+import { useAuth } from '../../hooks';
 import { useTaskStatisticsQuery } from '../../store/api/TaskApi';
 
 import Grid from '@mui/material/Grid';
@@ -17,7 +16,7 @@ import { StatisticsItem } from './StatisticsItem/StatisticsItem';
 export const Statistics = () => {
     const { pathname } = useLocation();
 
-    const { token } = useAppSelector(auth);
+    const { token } = useAuth();
     const { data, isLoading } = useTaskStatisticsQuery({
         token,
         category: pathname.slice(1),
