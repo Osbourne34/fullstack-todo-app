@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { emptySplitApi } from './api/api';
+import { emptySplitApi } from './api';
 import authReducer from './slices/authSlice';
 import uiReducer from './slices/uiSlice';
 import categoryReducer from './slices/categorySlice';

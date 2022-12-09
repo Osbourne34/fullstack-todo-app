@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useAppSelector, useAppDispatch } from '../../../hooks';
 import { auth } from '../../../store/slices/authSlice';
@@ -53,13 +53,13 @@ export const TasksTable = () => {
         completed,
         priority,
     } = useAppSelector(task);
-    const { pathname } = useLocation();
+    const { id: category } = useParams();
 
     const handleChangePage = (event: unknown, newPage: number) => {
         dispatch(setPage(newPage));
     };
     const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement>
+        event: React.ChangeEvent<HTMLInputElement>,
     ) => {
         dispatch(setLimit(parseInt(event.target.value, 10)));
         setPage(0);
@@ -71,7 +71,7 @@ export const TasksTable = () => {
         error,
     } = useGetAllTasksQuery({
         token,
-        category: pathname.slice(1),
+        category,
         limit,
         page,
         searchValue,

@@ -6,7 +6,12 @@ import { MainPage } from './Main';
 import { RegisterPage } from './Register';
 import { LoginPage } from './Login';
 
-import { AuthLayout, ProtectedRoute, PublicRoute } from '../components';
+import {
+    AuthLayout,
+    ProtectedRoute,
+    PublicRoute,
+    TasksTable,
+} from '../components';
 
 export const Routing = () => {
     return (
@@ -19,9 +24,10 @@ export const Routing = () => {
                     </ProtectedRoute>
                 }
             >
-                <Route path=":id" element={<></>} />
+                <Route index element={<TasksTable />} />
+                <Route path=":id" element={<TasksTable />} />
             </Route>
-            <Route path="auth" element={<AuthLayout />}>
+            <Route element={<AuthLayout />}>
                 <Route
                     path="register"
                     element={

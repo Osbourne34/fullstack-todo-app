@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch } from './hooks';
 import { setAuth } from './store/slices/authSlice';
-import { useLazyMeQuery } from './store/api/AuthApi';
+import { useLazyMeQuery } from './features/auth';
 
 import { SnackbarProvider } from 'notistack';
 
@@ -18,14 +18,14 @@ export const App = () => {
 
     useEffect(() => {
         if (localStorage.getItem('token')) {
-            me(String(localStorage.getItem('token')))
+            me(localStorage.getItem('token') as string)
                 .unwrap()
-                .then((data) => {
+                .then((response) => {
                     dispatch(
                         setAuth({
-                            user: data,
-                            token: String(localStorage.getItem('token')),
-                        })
+                            user: response,
+                            token: localStorage.getItem('token') as string,
+                        }),
                     );
                 })
                 .catch(() => {
@@ -55,7 +55,7 @@ export const App = () => {
                 <SnackbarProvider
                     maxSnack={3}
                     autoHideDuration={3000}
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
                     <Routing />
                 </SnackbarProvider>

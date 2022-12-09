@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Outlet } from 'react-router-dom';
+
 import Box from '@mui/material/Box';
 
 import {
@@ -7,7 +9,6 @@ import {
     Drawer,
     Header,
     Sidebar,
-    TasksTable,
     TasksFilter,
     Statistics,
 } from '../../components';
@@ -39,7 +40,7 @@ export const MainPage = () => {
                     <TasksFilter />
                     <AddTask />
                 </Box>
-                <TasksTable />
+                <Outlet />
             </Box>
         </>
     );

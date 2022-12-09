@@ -1,4 +1,4 @@
-import { emptySplitApi } from './api';
+import { emptySplitApi } from '.';
 
 import { Task } from '../../types/Task';
 import { TasksResponse } from '../../types/TasksResponse';

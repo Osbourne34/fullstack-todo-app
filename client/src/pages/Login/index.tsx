@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
-import { Login } from '../../features';
+import { Login } from '../../features/auth';
 
 export const LoginPage = () => {
     return (
@@ -26,7 +26,7 @@ export const LoginPage = () => {
                 }}
             >
                 <Typography sx={{ mr: 1 }}>Нет аккаунта?</Typography>
-                <Link component={RouterLink} to="/auth/register">
+                <Link component={RouterLink} to="/register">
                     Создать аккаунт
                 </Link>
             </Box>

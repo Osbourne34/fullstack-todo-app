@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { useSnackbar } from 'notistack';
 
-import { useAppDispatch } from '../../../hooks';
-import { useLoginMutation } from '../../../store/api/AuthApi';
-import { setAuth } from '../../../store/slices/authSlice';
+import { useAppDispatch } from '../../../../hooks';
+import { useLoginMutation } from '../../api';
+import { setAuth } from '../../../../store/slices/authSlice';
 
-import { AuthForm } from '../../../components';
+import { AuthForm } from '../../../../components';
 
-import { isErrorWithMessage } from '../../../types/ErrorsApi';
-import { AuthFormInputs } from '../../../types/AuthFormInputs';
+import { isErrorWithMessage } from '../../../../types/ErrorsApi';
+import { AuthFormInputs } from '../../../../types/AuthFormInputs';
 
 export const Login = () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -21,16 +21,16 @@ export const Login = () => {
 
     const handleLogin = async (body: AuthFormInputs) => {
         try {
-            const data = await login(body).unwrap();
-            localStorage.setItem('token', data.token);
+            const response = await login(body).unwrap();
+            localStorage.setItem('token', response.token);
             enqueueSnackbar('Вы авторизованы', { variant: 'success' });
-            dispatch(setAuth(data));
+            dispatch(setAuth(response));
             navigate('/', { replace: true });
         } catch (error) {
             enqueueSnackbar(
                 (isErrorWithMessage(error) && error.data.message) ||
                     'Ошибка при входе',
-                { variant: 'error' }
+                { variant: 'error' },
             );
         }
     };

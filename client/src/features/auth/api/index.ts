@@ -1,7 +1,7 @@
-import { emptySplitApi } from './api';
-import { AuthFormInputs } from '../../types/AuthFormInputs';
-import { AuthResponse } from '../../types/AuthResponse';
-import { User } from '../../types/User';
+import { emptySplitApi } from '../../../store/api';
+import { AuthFormInputs } from '../../../types/AuthFormInputs';
+import { AuthResponse } from '../../../types/AuthResponse';
+import { User } from '../../../types/User';
 
 export const authApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({

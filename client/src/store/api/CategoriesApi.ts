@@ -1,4 +1,4 @@
-import { emptySplitApi } from './api';
+import { emptySplitApi } from '.';
 import { Category } from '../../types/Category';
 import { CreateAndUpdateFormInput } from '../../types/CreateAndUpdateFormInput';
 
