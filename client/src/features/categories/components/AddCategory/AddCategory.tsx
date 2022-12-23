@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { useAuth } from '../../../hooks';
-import { useCreateCategoryMutation } from '../../../store/api/CategoriesApi';
+import { useAuth } from '../../../../hooks';
+import { useCreateCategoryMutation } from '../../api';
 
 import { useSnackbar } from 'notistack';
 
@@ -12,8 +12,8 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
-import { CreateAndUpdateForm } from '../../../components';
-import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
+import { CreateAndUpdateForm } from '../../../../components';
+import { CreateAndUpdateFormInput } from '../../../../types/CreateAndUpdateFormInput';
 
 export const AddCategory = () => {
     const { enqueueSnackbar } = useSnackbar();

@@ -2,19 +2,18 @@ import React from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { useAuth } from '../../../hooks';
+import { useAppDispatch, useAppSelector, useAuth } from '../../../../hooks';
 import {
     useGetAllCategoriesQuery,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
-} from '../../../store/api/CategoriesApi';
+} from '../../api';
 import {
     category,
     setIdToUpdate,
     setTitleToUpdate,
     setIdToDelete,
-} from '../../../store/slices/categorySlice';
+} from '../../slices';
 
 import { useSnackbar } from 'notistack';
 
@@ -22,18 +21,19 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 
-import { CategoryItem } from '../../Categories';
+import { CategoryList } from '../../components';
 import {
     Loader,
     ConfirmDialog,
     CreateAndUpdateForm,
-} from '../../../components';
+} from '../../../../components';
 
-import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
+import { CreateAndUpdateFormInput } from '../../../../types/CreateAndUpdateFormInput';
 
-import { routes } from '../../../pages/routes';
+import { routes } from '../../../../pages/routes';
+import { Typography } from '@mui/material';
 
-export const CategoryList = () => {
+export const Categories = () => {
     const { enqueueSnackbar } = useSnackbar();
     const { idToUpdate, titleToUpdate, idToDelete, searchValue } =
         useAppSelector(category);
@@ -95,46 +95,44 @@ export const CategoryList = () => {
     if (error) {
         return <div>Произошла ошибка</div>;
     }
-
     return (
         <>
-            {categories &&
-                categories.map(({ _id, title, inCompleteTasks }) => (
-                    <CategoryItem
-                        key={_id}
-                        link={_id}
-                        title={title}
-                        inCompleteTasks={inCompleteTasks}
-                        editable
-                    />
-                ))}
+            {categories && categories?.length > 0 ? (
+                <>
+                    <CategoryList categories={categories} />
 
-            <Dialog
-                open={!!idToUpdate}
-                onClose={handleCloseDialog}
-                maxWidth="xs"
-                fullWidth
-            >
-                <DialogTitle>Редактирование категорий</DialogTitle>
-
-                <DialogContent sx={{ overflow: 'visible' }}>
-                    <CreateAndUpdateForm
-                        onSubmit={submitUpdate}
+                    <Dialog
+                        open={!!idToUpdate}
                         onClose={handleCloseDialog}
-                        error={updateError}
-                        defaultValue={titleToUpdate}
-                    />
-                </DialogContent>
-            </Dialog>
+                        maxWidth="xs"
+                        fullWidth
+                    >
+                        <DialogTitle>Редактирование категорий</DialogTitle>
 
-            <ConfirmDialog
-                open={!!idToDelete}
-                onClose={handleCloseConfirm}
-                confirm={confirmDeletion}
-                loading={loadingDelete}
-                contentTitle="Вы действительно хотите удалить категорию?"
-                contentSubtitle="Сами задачи не удаляются"
-            />
+                        <DialogContent sx={{ overflow: 'visible' }}>
+                            <CreateAndUpdateForm
+                                onSubmit={submitUpdate}
+                                onClose={handleCloseDialog}
+                                error={updateError}
+                                defaultValue={titleToUpdate}
+                            />
+                        </DialogContent>
+                    </Dialog>
+
+                    <ConfirmDialog
+                        open={!!idToDelete}
+                        onClose={handleCloseConfirm}
+                        confirm={confirmDeletion}
+                        loading={loadingDelete}
+                        contentTitle="Вы действительно хотите удалить категорию?"
+                        contentSubtitle="Сами задачи не удаляются"
+                    />
+                </>
+            ) : searchValue.length > 0 ? (
+                <Typography>Ничего не найдено</Typography>
+            ) : (
+                <Typography>Создайте категорий</Typography>
+            )}
         </>
     );
 };

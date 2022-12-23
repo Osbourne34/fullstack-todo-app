@@ -1,6 +1,6 @@
-import { emptySplitApi } from '.';
-import { Category } from '../../types/Category';
-import { CreateAndUpdateFormInput } from '../../types/CreateAndUpdateFormInput';
+import { emptySplitApi } from '../../../store/api';
+import { Category } from '../../../types/Category';
+import { CreateAndUpdateFormInput } from '../../../types/CreateAndUpdateFormInput';
 
 export const categoriesApi = emptySplitApi.injectEndpoints({
     endpoints: (builder) => ({

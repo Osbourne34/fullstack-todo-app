@@ -8,7 +8,7 @@ import { useAppDispatch } from '../../../../hooks';
 import { useRegisterMutation } from '../../api';
 import { setAuth } from '../../slices';
 
-import { AuthForm } from '../AuthForm';
+import { AuthForm } from '../';
 
 import { isErrorWithMessage } from '../../../../types/ErrorsApi';
 import { AuthFormInputs } from '../../../../types/AuthFormInputs';

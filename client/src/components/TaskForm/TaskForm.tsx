@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import * as yup from 'yup';
 
 import { useAuth } from '../../hooks';
-import { useGetAllCategoriesQuery } from '../../store/api/CategoriesApi';
+import { useGetAllCategoriesQuery } from '../../features/categories/api';
 import { useGetAllPrioritiesQuery } from '../../store/api/PriorityApi';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { SerializedError } from '@reduxjs/toolkit/dist/createAsyncThunk';

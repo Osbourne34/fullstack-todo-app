@@ -2,18 +2,14 @@ import React from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useAppDispatch } from '../../../hooks';
-import {
-    setIdToUpdate,
-    setTitleToUpdate,
-    setIdToDelete,
-} from '../../../store/slices/categorySlice';
+import { useAppDispatch } from '../../../../hooks';
+import { setIdToUpdate, setTitleToUpdate, setIdToDelete } from '../../slices';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
-import { CategoryActions } from '../../Categories';
+import { CategoryActions } from '../../components';
 
 import { styles } from './CategoryItem.styles';
 

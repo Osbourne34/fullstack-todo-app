@@ -11,8 +11,8 @@ import {
     AddCategory,
     CategoryItem,
     SearchCategory,
-    CategoryList,
-} from '../Categories';
+    Categories,
+} from '../../features/categories';
 
 export const Sidebar = React.memo(() => {
     const { token } = useAuth();
@@ -51,7 +51,7 @@ export const Sidebar = React.memo(() => {
 
             <Divider sx={{ my: 2 }} />
 
-            <CategoryList />
+            <Categories />
         </Box>
     );
 });

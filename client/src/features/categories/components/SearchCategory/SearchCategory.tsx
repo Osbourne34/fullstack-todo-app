@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { category, setSearchValue } from '../../../store/slices/categorySlice';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { category, setSearchValue } from '../../slices';
 
 import TextField from '@mui/material/TextField';
 
